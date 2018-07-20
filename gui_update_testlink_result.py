@@ -16,7 +16,6 @@ first_menu = ['设备首页', '服务商管理', '设备管理', '配置管理',
 
 
 def to_execute_cases():
-    need_run_cases = []
 
     # get targeted project
     projects = tlc.getProjects()

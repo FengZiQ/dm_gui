@@ -17,7 +17,7 @@ class GUITestTool(object):
 
     def __init__(self, base_url=server):
         # login user and username
-        self.user = 'admin'
+        self.user = config_data['username']
         self.password = config_data['pwd']
 
         # mark test cases execution status
@@ -42,7 +42,7 @@ class GUITestTool(object):
     locator type: 
     By.ID,By.NAME,By.CLASS_NAME,By.TAG_NAME,By.LINK_TEXT,By.PARTIAL_LINK_TEXT,By.XPATH,By.CSS_SELECTOR
     """
-    def click_action(self, path, location, locator=By.XPATH, response_time=3):
+    def click_action(self, path, location, locator=By.XPATH, response_time=5):
         try:
             self.driver.find_element(locator, path).click()
             time.sleep(response_time)

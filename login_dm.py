@@ -27,7 +27,7 @@ def login_api():
     url2 = config_data['host'] + '/login?'
     cookies1 = content1.cookies.values()
     data = {
-        'username': 'admin',
+        'username': config_data['username'],
         'password': config_data['pwd'],
         'lt': ticket,
         'execution': 'e1s1',
