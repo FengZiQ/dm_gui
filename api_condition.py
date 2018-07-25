@@ -4,7 +4,7 @@ import json
 import random
 import xlwt
 
-server = 'http://dm.preo.inspos.cn/'
+server = config_data['server']
 session = login_api()
 
 
@@ -317,7 +317,7 @@ def del_self_config_mode(template_id, customer_id):
 
 if __name__ == "__main__":
     # print(get_unsold_device_info())
-    # print(customer_info('测试账户'))
+    print(customer_info('测试账户'))
     # print(new_customer('test_customer'))
     # delete_customer(new_customer('test_customer'))
     # upload_excel_file(get_unsold_device_info())
@@ -331,4 +331,4 @@ if __name__ == "__main__":
     # print(get_sum_self_config_info('4113180400130999'))
     # del_sum_self_config('')
     # print(add_sum_self_config(get_device_info('4113180400130999')))
-    print(add_self_config_mode('8'))
+    # print(add_self_config_mode('8'))

@@ -44,7 +44,8 @@ def login_api():
     )
     location = content2.headers['location']
     session.get(location)
-    userInfo = session.get(config_data['server'] + '/userInfo')
+    # userInfo = session.get(config_data['server'] + '/userInfo')
+
 
     return session
 
