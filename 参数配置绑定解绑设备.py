@@ -9,7 +9,10 @@ def precondition():
     # 销售设备
     unsold_d = get_unsold_device_info()
     bind_device('44', '0010025', [unsold_d[i]['id'] for i in range(len(unsold_d))])
-    upload_excel_file(unsold_d, config_data['file_path'] + '参数配置批量绑定解绑测试.xls')
+    upload_excel_file(
+        [unsold_d[i]['serialNum'] for i in range(len(unsold_d))],
+        config_data['file_path'] + '参数配置批量绑定解绑测试.xls'
+    )
     return unsold_d
 
 

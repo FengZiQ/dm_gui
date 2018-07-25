@@ -42,7 +42,7 @@ class GUITestTool(object):
     locator type: 
     By.ID,By.NAME,By.CLASS_NAME,By.TAG_NAME,By.LINK_TEXT,By.PARTIAL_LINK_TEXT,By.XPATH,By.CSS_SELECTOR
     """
-    def click_action(self, path, location, locator=By.XPATH, response_time=5):
+    def click_action(self, path, location, locator=By.XPATH, response_time=3):
         try:
             self.driver.find_element(locator, path).click()
             time.sleep(response_time)
@@ -86,7 +86,7 @@ class GUITestTool(object):
         try:
             all_logs('期望结果: ' + location + ': ' + str(expected_text))
             actual_text = self.driver.find_element(locator, path).text
-            all_logs('实际结果: ' + location + ': ' + actual_text)
+            all_logs('实际结果: ' + location + ': \n' + actual_text)
             testlink(location + ': ' + actual_text)
             testlink(end)
             for t in expected_text:

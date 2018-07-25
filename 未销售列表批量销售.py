@@ -7,7 +7,10 @@ def sell_device():
     tool = GUITestTool()
     # 测试数据
     test_data = get_unsold_device_info()
-    upload_excel_file(test_data, config_data['file_path'] + '批量销售测试.xls')
+    upload_excel_file(
+        [test_data[i]['serialNum'] for i in range(len(test_data))],
+        config_data['file_path'] + '批量销售测试.xls'
+    )
     # 进入未销售列表页
     tool.click_action(
         '/html/body/div/div/ul/li[3]/a',

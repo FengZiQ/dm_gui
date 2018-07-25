@@ -7,7 +7,10 @@ def precondition():
     # 销售15台设备给测试账户，并将设备号保存在Excel中
     unsold_d = get_unsold_device_info()
     try:
-        upload_excel_file(unsold_d, config_data['file_path'] + '批量设置保修期.xls')
+        upload_excel_file(
+            [unsold_d[i]['serialNum'] for i in range(len(unsold_d))],
+            config_data['file_path'] + '批量设置保修期.xls'
+        )
     except Exception as e:
         print(e)
     bind_device(
