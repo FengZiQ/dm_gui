@@ -12,7 +12,7 @@ session = login_api()
 def get_unsold_device_info():
     try:
         res = session.get(
-            server + 'device/pageList?baseType=2&modelType=4&func=unbindDevices'
+            server + 'device/pageList?pageSize=15&baseType=2&modelType=4&func=unbindDevices'
         )
         temp0 = json.loads(res.text)
         unsold_d_info = temp0['data']['list']
@@ -278,20 +278,20 @@ def del_sum_self_config(config_id):
     try:
         session.post(
             server + 'deviceConfig/deletes',
-            json=[config_id]
+            json=[int(config_id)]
         )
     except:
         pass
 
 
 # 新增自定义配置模板
-def add_self_config_mode(customer_id):
+def add_self_config_mode(customer_id, config_name):
     try:
         res = session.post(
             server + 'paramListTemplate/add',
             json={
-                "customerId": customer_id,
-                "templateName": "selenium_测试自定义配置模板",
+                "customerId": str(customer_id),
+                "templateName": config_name,
                 "paramNameValue": [
                     {"paramShortName": "测试1", "paramName": "test1"},
                     {"paramShortName": "测试2", "paramName": "test2"}
@@ -309,7 +309,208 @@ def del_self_config_mode(template_id, customer_id):
     try:
         session.post(
             server + 'paramListTemplate/deletes',
-            json={"id": template_id,"customerId": customer_id}
+            json={"id": str(template_id), "customerId": str(customer_id)}
+        )
+    except:
+        pass
+
+
+# 新增自定义通用配置
+def add_self_common_config(self_name, customer_id, mode_id):
+    try:
+        temp = session.get(
+            server + 'paramListTemplate/paramTemplateQuery/query?customerId=' + str(customer_id)
+        )
+        mode_info = json.loads(temp.text)['data']
+        res = session.post(
+            server + 'paramListConfig/add',
+            json={
+                "name": self_name,
+                "customerId": str(customer_id),
+                "paramListParametersList": [
+                    {
+                        "paramShortname": mode_info[0]['paramShortname'],
+                        "paramValue": "test_通用配置1",
+                        "paramName": mode_info[0]['paramName'],
+                        "templateParametersId": str(mode_info[0]['id'])
+                    },
+                    {
+                        "paramShortname": mode_info[1]['paramShortname'],
+                        "paramValue": "test_通用配置2",
+                        "paramName": mode_info[1]['paramName'],
+                        "templateParametersId": str(mode_info[0]['id'])
+                    }
+                ],
+                "templateName": mode_info[0]['templateName'],
+                "paramTemplateId": int(mode_id)
+            }
+        )
+        temp = json.loads(res.text)
+        return temp['data']
+    except:
+        pass
+
+
+# 自定义通用配置绑定解绑设备: action_type=1为绑定，=0为解绑
+def device_and_self_common_config(self_cc_id, action_type, device_id=list(), device_no=list()):
+    try:
+        session.post(
+            server + 'deviceIsBindParamList/modify',
+            json={
+                "paramListId": self_cc_id,
+                "deviceIds": device_id,
+                "serialNums": device_no,
+                "type": action_type
+            }
+        )
+    except:
+        pass
+
+
+# 获取自定义通用配置信息
+def get_self_common_config_id(config_name):
+    try:
+        res = session.get(
+            server + 'paramListConfig/pageList?name=' + config_name
+        )
+        temp = json.loads(res.text)
+        config_id = temp['data']['list'][0]['id']
+        return config_id
+    except:
+        pass
+
+
+# 删除自定义通用配置
+def del_self_common_config(config_id):
+    try:
+        session.post(
+            server + 'paramListConfig/deletes',
+            json={"id": int(config_id)}
+        )
+    except:
+        pass
+
+
+# 获取自定义批量配置信息
+def get_self_batch_config_id(device_no, customer_id='44'):
+    try:
+        res = session.get(
+            server + 'definedBatchConfig/pageList?customerId=' + customer_id + '&type=1&serialNum=' + device_no
+        )
+        temp = json.loads(res.text)
+        config_id = temp['data']['list'][0]['id']
+        return config_id
+    except:
+        pass
+
+
+# 添加自定义批量配置
+def add_self_batch_config(device_no, customer_id='44'):
+    try:
+        session.post(
+            server + 'definedBatchConfig/add',
+            json={
+                "customerId": customer_id,
+                "definedBatchConfigInfoList": [{
+                    "merchantNum": "test_add",
+                    "serialNum": device_no
+                }]
+            }
+        )
+    except:
+        pass
+
+
+# 删除自定义批量配置
+def del_self_batch_config(config_id):
+    try:
+        session.post(
+            server + 'definedBatchConfig/deletes',
+            json=[int(config_id)]
+        )
+    except:
+        pass
+
+
+# 获取票据解析配置id
+def get_receipt_config_id(mode_name, customer_id='44'):
+    try:
+        res = session.get(
+            server + 'receiptTemplate/pageList?customer_id=' + customer_id + '&name=' + mode_name
+        )
+        temp = json.loads(res.text)
+        config_id = temp['data']['list'][0]['id']
+        return config_id
+    except:
+        pass
+
+
+# 增加票据解析模板
+def add_receipt_config_mode(config_name, customer_id):
+    try:
+        session.post(
+            server + 'receiptTemplate/add',
+            json={
+                "name": config_name,
+                "description": "mode描述",
+                "exclusiveKeys": ["排除Word"],
+                "customerId": customer_id,
+                "notifyUrl": "通知url",
+                "fields": [{
+                    "endType": "1",
+                    "fetchType": "1",
+                    "key": "关键字",
+                    "keywords": ["候选字"],
+                    "urlParam": "参数名parameter",
+                    "fetchNextLine": "0"
+                }],
+                "enabled": "1",
+                "key": "密钥key",
+                "enableStore": "1",
+                "securityPush": "1"
+            }
+        )
+    except:
+        pass
+
+
+# 票据解析配置绑定设备
+def receipt_config_bind_device(device_id, device_no, mode_id):
+    try:
+        session.post(
+            server + 'receiptTemplateConfig/add',
+            json={
+                "associateDevice": [{
+                    "key": device_id,
+                    "value": device_no
+                }],
+                "id": mode_id
+            }
+        )
+    except:
+        pass
+
+
+# 票据解析配置解绑设备
+def receipt_config_unbind_device(mode_id, device_no=list()):
+    try:
+        session.post(
+            server + 'receiptTemplateConfig/deletes',
+            json={
+                "templateId": mode_id,
+                "deviceNos": device_no
+            }
+        )
+    except:
+        pass
+
+
+# 删除票据解析配置
+def del_receipt_config_mode(mode_id):
+    try:
+        session.post(
+            server + 'receiptTemplate/deletes',
+            json=[int(mode_id)]
         )
     except:
         pass
@@ -317,7 +518,7 @@ def del_self_config_mode(template_id, customer_id):
 
 if __name__ == "__main__":
     # print(get_unsold_device_info())
-    print(customer_info('测试账户'))
+    # print(customer_info('测试账户'))
     # print(new_customer('test_customer'))
     # delete_customer(new_customer('test_customer'))
     # upload_excel_file(get_unsold_device_info())
@@ -331,4 +532,11 @@ if __name__ == "__main__":
     # print(get_sum_self_config_info('4113180400130999'))
     # del_sum_self_config('')
     # print(add_sum_self_config(get_device_info('4113180400130999')))
-    # print(add_self_config_mode('8'))
+    # print(add_self_config_mode('', ''))
+    # del_self_config_mode('', '')
+    # print(get_self_common_config_id('testtest'))
+    # del_self_common_config(163)
+    # get_self_batch_config_id('4113180400130999')
+    print(get_receipt_config_id('测试_fengziqi'))
+
+

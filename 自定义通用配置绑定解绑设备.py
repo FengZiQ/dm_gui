@@ -11,7 +11,7 @@ def precondition():
     bind_device('44', '0010025', [unsold_d[i]['id'] for i in range(len(unsold_d))])
     upload_excel_file(
         [unsold_d[i]['serialNum'] for i in range(len(unsold_d))],
-        config_data['file_path'] + '参数配置批量绑定解绑测试.xls'
+        config_data['file_path'] + '自定义通用配置批量绑定解绑测试.xls'
     )
     return unsold_d
 
@@ -20,14 +20,14 @@ device_info = precondition()
 
 
 def one_device_bind():
-    # 参数配置页
+    # 进入自定义通用配置页
     tool.click_action(
         '//*[@id="leftNav"]/li[4]',
         '配置管理标签'
     )
     tool.click_action(
-        '//*[@id="leftNav"]/li[4]/ul/li[1]',
-        '参数配置标签'
+        '//*[@id="leftNav"]/li[4]/ul/li[5]',
+        '自定义通用配置标签'
     )
     # 查询
     tool.fill_action(
@@ -49,7 +49,7 @@ def one_device_bind():
     )
     # 点击设备绑定按钮
     tool.click_action(
-        'bind',
+        'definedBind',
         '设备绑定按钮',
         locator=By.ID
     )
@@ -94,7 +94,7 @@ def one_device_bind():
 
 def one_device_unbind():
     time.sleep(5)
-    # 在参数配置设备解绑列表查询要解绑的设备
+    # 在自定义通用配置设备解绑列表查询要解绑的设备
     tool.fill_action(
         'queryDeviceId',
         device_info[0]['serialNum'],
@@ -135,27 +135,27 @@ def one_device_unbind():
 
 def batch_bind():
     time.sleep(5)
-    # 进入参数配置设备解绑列表
+    # 进入自定义通用配置设备解绑列表
     tool.click_action(
         '//a[@title="解绑设备列表"]',
         '解绑设备列表图标'
     )
     # 点击设备绑定按钮
     tool.click_action(
-        'bind',
+        'definedBind',
         '设备绑定按钮',
         locator=By.ID
     )
     # 点击批量绑定按钮
     tool.click_action(
-        'bind',
+        'definedBind',
         '批量绑定按钮',
         locator=By.ID
     )
     # 上传批量绑定文件
     tool.fill_action(
         'file',
-        config_data['file_path'] + '参数配置批量绑定解绑测试.xls',
+        config_data['file_path'] + '自定义通用配置批量绑定解绑测试.xls',
         '批量文件图标',
         locator=By.ID
     )
@@ -166,7 +166,7 @@ def batch_bind():
     )
     # 断言
     tool.contained_text_assert(
-        '//div[@id="batchBind"]/div/div/div[2]',
+        '//div[@id="definedBatchBind"]/div/div/div[2]',
         '导入结果显示区域',
         ['成功导入：15台', '未成功导入：0台']
     )
@@ -193,16 +193,16 @@ def batch_bind():
 
 def batch_unbind():
     time.sleep(5)
-    # 在参数配置设备解绑列表点击批量解绑按钮
+    # 在自定义通用配置设备解绑列表点击批量解绑按钮
     tool.click_action(
-        'unbind',
+        'definedUnbind',
         '批量解绑按钮',
         locator=By.ID
     )
     # 上传批量绑定文件
     tool.fill_action(
         'file',
-        config_data['file_path'] + '参数配置批量绑定解绑测试.xls',
+        config_data['file_path'] + '自定义通用配置批量绑定解绑测试.xls',
         '批量文件图标',
         locator=By.ID
     )
@@ -213,7 +213,7 @@ def batch_unbind():
     )
     # 断言
     tool.contained_text_assert(
-        '//div[@id="batchUnbind"]/div/div/div[2]',
+        '//div[@id="definedBatchUnbind"]/div/div/div[2]',
         '导入结果显示区域',
         ['成功导入：15台', '未成功导入：0台']
     )

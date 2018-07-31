@@ -46,7 +46,6 @@ def login_api():
     session.get(location)
     # userInfo = session.get(config_data['server'] + '/userInfo')
 
-
     return session
 
 

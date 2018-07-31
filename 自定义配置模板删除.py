@@ -6,7 +6,7 @@ tool = GUITestTool()
 
 # 前置条件：创建一个服务商“测试自定义配置模板”，基于该服务商新增一个自定义配置
 cus_id = new_customer('测试自定义配置模板')
-self_config_id = add_self_config_mode(cus_id)
+self_config_id = add_self_config_mode(cus_id, 'selenium_测试自定义配置模板')
 
 
 def self_config_del():

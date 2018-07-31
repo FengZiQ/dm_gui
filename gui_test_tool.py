@@ -64,6 +64,23 @@ class GUITestTool(object):
             all_logs(location + ' is not found')
             testlink(location + ' is not found')
 
+    def wait_for_element(self, path, location, locator=By.XPATH):
+        text = ''
+        for i in range(10):
+            try:
+                if self.driver.find_element(locator, path):
+                    text += self.driver.find_element(locator, path).text
+                    break
+            except Exception as e:
+                print(e)
+                all_logs(location + ' is not found\n')
+                break
+            time.sleep(1)
+        else:
+            all_logs('time out')
+
+        return text
+
     # 每条case的最后一个断言end = '@结束@'
     def equal_text_assert(self, path, location, expected_text, end='', locator=By.XPATH):
         try:
@@ -84,7 +101,7 @@ class GUITestTool(object):
     # 每条case的最后一个断言end = '@结束@'
     def contained_text_assert(self, path, location, expected_text=list(), end='', locator=By.XPATH):
         try:
-            all_logs('期望结果: ' + location + ': ' + str(expected_text))
+            all_logs('期望结果: ' + location + '包括: ' + str(expected_text))
             actual_text = self.driver.find_element(locator, path).text
             all_logs('实际结果: ' + location + ': \n' + actual_text)
             testlink(location + ': ' + actual_text)
@@ -117,22 +134,19 @@ class GUITestTool(object):
             testlink(end)
             all_logs(location + ' is not found\n')
 
-    def wait_for_element(self, path, location, locator=By.XPATH):
-        text = ''
-        for i in range(10):
-            try:
-                if self.driver.find_element(locator, path):
-                    text += self.driver.find_element(locator, path).text
-                    break
-            except Exception as e:
-                print(e)
-                all_logs(location + ' is not found\n')
-                break
-            time.sleep(1)
+    def element_not_exist_assert(self, path, location, end='', locator=By.XPATH):
+        try:
+            all_logs('期望结果: ' + location + '不存在')
+            self.driver.find_element(locator, path)
+        except:
+            all_logs('实际结果: ' + location + '不存在')
+            testlink(location + '不存在')
+            testlink(end)
         else:
-            all_logs('time out')
-
-        return text
+            self.FailedFlag = True
+            all_logs('实际结果: ' + location + ' 存在')
+            testlink(location + ' 存在')
+            testlink(end)
 
     def mark_status(self):
 
