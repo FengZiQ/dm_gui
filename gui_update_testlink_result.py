@@ -62,75 +62,77 @@ def to_execute_cases():
                     buildname=build_name,
                     platformname=case_platform_name
                 )
+                try:
+                    # verify tester of execution cases
+                    if list(tester_key.keys())[0] == login_name[0]['login']:
 
-                # verify tester of execution cases
-                if list(tester_key.keys())[0] == login_name[0]['login']:
+                        case_name = case_body['tcase_name']
+                        print(case_name)
 
-                    case_name = case_body['tcase_name']
-                    print(case_name)
+                        # execute test case
+                        os.system('python ' + case_name + '.py')
+                        case_steps = tlc.getTestCase(case_body['tcase_id'])[0]['steps']
 
-                    # execute test case
-                    os.system('python ' + case_name + '.py')
-                    case_steps = tlc.getTestCase(case_body['tcase_id'])[0]['steps']
+                        # collect the test case result: 'result': 'p' or 'result': 'f' marks one case result;
+                        notes = open('testLink.notes', 'r', encoding='UTF-8')
+                        temp = notes.read().split("'result': ")
+                        # temp1 = temp.split("'result': ")
 
-                    # collect the test case result: 'result': 'p' or 'result': 'f' marks one case result;
-                    notes = open('testLink.notes', 'r', encoding='UTF-8')
-                    temp = notes.read().split("'result': ")
-                    # temp1 = temp.split("'result': ")
+                        # result of all steps
+                        test_case_result = temp[-1][1]
 
-                    # result of all steps
-                    test_case_result = temp[-1][1]
+                        # execution notes of all steps
+                        temp3 = temp[-2].replace("'p'", '').replace("'f'", '')
 
-                    # execution notes of all steps
-                    temp3 = temp[-2].replace("'p'", '').replace("'f'", '')
+                        steps_notes = temp3.split('@结束@')[:-1]
 
-                    steps_notes = temp3.split('@结束@')[:-1]
+                        notes.close()
 
-                    notes.close()
+                        # if case steps length equal step notes length and test case result is 'p', the case result is pass
+                        if len(steps_notes) == len(case_steps) and test_case_result == 'p':
 
-                    # if case steps length equal step notes length and test case result is 'p', the case result is pass
-                    if len(steps_notes) == len(case_steps) and test_case_result == 'p':
+                            test_case_step_results = [{
+                                'step_number': str(j + 1),
+                                'result': 'p',
+                                'notes': steps_notes[j]
+                            } for j in range(len(steps_notes))]
 
-                        test_case_step_results = [{
-                            'step_number': str(j + 1),
-                            'result': 'p',
-                            'notes': steps_notes[j]
-                        } for j in range(len(steps_notes))]
+                            tlc.reportTCResult(
+                                case_id, target_test_plan_id,
+                                build_name,
+                                test_case_result,
+                                'automated test cases',
+                                guess=True,
+                                testcaseexternalid=test_case_external_id,
+                                platformname=case_platform_name,
+                                execduration=duration_min,
+                                timestamp=time_stamp,
+                                steps=test_case_step_results
+                            )
+                        elif len(steps_notes) == len(case_steps) and test_case_result == 'f':
 
-                        tlc.reportTCResult(
-                            case_id, target_test_plan_id,
-                            build_name,
-                            test_case_result,
-                            'automated test cases',
-                            guess=True,
-                            testcaseexternalid=test_case_external_id,
-                            platformname=case_platform_name,
-                            execduration=duration_min,
-                            timestamp=time_stamp,
-                            steps=test_case_step_results
-                        )
-                    elif len(steps_notes) == len(case_steps) and test_case_result == 'f':
+                            test_case_step_results = [{
+                                'step_number': str(j + 1),
+                                'result': 'f',
+                                'notes': steps_notes[j]
+                            } for j in range(len(steps_notes))]
 
-                        test_case_step_results = [{
-                            'step_number': str(j + 1),
-                            'result': 'f',
-                            'notes': steps_notes[j]
-                        } for j in range(len(steps_notes))]
-
-                        tlc.reportTCResult(
-                            case_id, target_test_plan_id,
-                            build_name,
-                            test_case_result,
-                            'automated test cases',
-                            guess=True,
-                            testcaseexternalid=test_case_external_id,
-                            platformname=case_platform_name,
-                            execduration=duration_min,
-                            timestamp=time_stamp,
-                            steps=test_case_step_results
-                        )
-                    else:
-                        print('\nFailed updates!\n')
+                            tlc.reportTCResult(
+                                case_id, target_test_plan_id,
+                                build_name,
+                                test_case_result,
+                                'automated test cases',
+                                guess=True,
+                                testcaseexternalid=test_case_external_id,
+                                platformname=case_platform_name,
+                                execduration=duration_min,
+                                timestamp=time_stamp,
+                                steps=test_case_step_results
+                            )
+                        else:
+                            print('\nFailed updates!\n')
+                except Exception as e:
+                    print(e)
 
 
 if __name__ == "__main__":

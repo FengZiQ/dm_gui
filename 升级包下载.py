@@ -15,10 +15,17 @@ def release_load():
         '//*[@id="leftNav"]/li[3]/ul/li[3]',
         '升级包管理标签'
     )
-    # 查询
+    # 升级包名称输入框：A5公版
     tool.fill_action(
         'softName',
-        '测试_固件_test1',
+        'A5公版',
+        '升级包名称输入框',
+        locator=By.ID
+    )
+    # 升级包名称输入框: 4.0.22
+    tool.fill_action(
+        'version',
+        '4.0.22',
         '升级包名称输入框',
         locator=By.ID
     )
@@ -32,6 +39,7 @@ def release_load():
     print('期望结果：下载图标对应的超链接为“http://inspiry-product.oss-cn-beijing.aliyuncs.com/firmware/包名”')
     print('实际结果：' + str(link))
     testlink('下载图标对应的超链接为：' + str(link))
+    testlink('@结束@')
     if 'http://inspiry-product.oss-cn-beijing.aliyuncs.com/firmware/' not in str(link):
         tool.FailedFlag = True
 

@@ -516,6 +516,92 @@ def del_receipt_config_mode(mode_id):
         pass
 
 
+# 新增全局配置
+def add_global_config(config_name):
+    try:
+        res = session.post(
+            server + 'commonConfig/add',
+            json={
+                "configName": config_name,
+                "logUrl": "http://test.test",
+                "receiptUrl": "http://test.test",
+                "pingUrl": "http://test.test"
+            }
+        )
+        temp = json.loads(res.text)
+        return temp['data']
+    except:
+        pass
+
+
+# 获取全局配置id
+def get_global_config_id(config_name):
+    try:
+        res = session.get(
+            server + 'commonConfig/pageList?configName=' + config_name
+        )
+        temp = json.loads(res.text)
+        config_id = temp['data']['list'][0]['id']
+        return config_id
+    except:
+        pass
+
+
+# 删除全局配置
+def del_global_config(config_id):
+    try:
+        session.post(
+            server + 'commonConfig/deletes',
+            json=[int(config_id)]
+        )
+    except:
+        pass
+
+
+# 新增全局配置
+def add_log_config(customer_id):
+    try:
+        res = session.post(
+            server + 'logConfig/add',
+            json={
+                "customerId": customer_id,
+                "type": "0",
+                "notifyUrl": "http://test.cn.com/customer/notify",
+                "signKey": "密钥",
+                "description": "描述",
+                "status": "1"
+            }
+        )
+        temp = json.loads(res.text)
+        return temp['data']
+    except:
+        pass
+
+
+# 获取全局配置id
+def get_log_config_id(customer_name):
+    try:
+        res = session.get(
+            server + 'logConfig/pageList?customerName=' + customer_name
+        )
+        temp = json.loads(res.text)
+        config_id = temp['data']['list'][0]['id']
+        return config_id
+    except:
+        pass
+
+
+# 删除全局配置
+def del_log_config(config_id):
+    try:
+        session.post(
+            server + 'logConfig/deletes',
+            json=[int(config_id)]
+        )
+    except:
+        pass
+
+
 if __name__ == "__main__":
     # print(get_unsold_device_info())
     # print(customer_info('测试账户'))
