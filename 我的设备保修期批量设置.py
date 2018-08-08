@@ -42,7 +42,12 @@ def batch_setting_warranty_period():
         '保修期设置按钮'
     )
     # 选择批量文件
-    tool.driver.find_element_by_id('deviceFile').send_keys(config_data['file_path'] + '批量设置保修期.xls')
+    tool.fill_action(
+        'deviceFile',
+        config_data['file_path'] + '批量设置保修期.xls',
+        '浏览图标',
+        locator=By.ID
+    )
     # 输入保修期与延保期
     tool.fill_action(
         'guarantee',
