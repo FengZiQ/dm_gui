@@ -4,9 +4,9 @@ import base64
 
 
 def view_log(log_server, cmd):
-    server = b'bmV4dXMuMmR1cGF5LmNvbQ=='
-    name = b'eWluZ3lpbmc='
-    pwd = b'emhheGluYnU2NjY='
+    server = b'b'
+    name = b'b'
+    pwd = b'b'
     # 连接ssh
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
