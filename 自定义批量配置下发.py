@@ -2,6 +2,7 @@
 from gui_test_tool import *
 from api_condition import *
 from selenium.webdriver.common.keys import Keys
+from view_log import view_log
 
 tool = GUITestTool()
 
@@ -63,11 +64,20 @@ def issue():
         locator=By.CLASS_NAME,
         response_time=1
     )
-    # 断言
+    # 断言提示消息
     tool.equal_text_assert(
         '/html/body/div/div/span/p',
         '提示消息',
-        '下发配置成功',
+        '下发配置成功'
+    )
+    # 断言log是否触发
+    cmd = 'tail -50f /data/log/inspos-dm-ppcp2.log | grep "4113180400130999"'
+    log_content = {'text': view_log(config_data['log_server1'], cmd)}
+    if len(log_content['text']) <= len(cmd):
+        log_content['text'] = view_log(config_data['log_server2'], cmd)
+    tool.log_assert(
+        log_content['text'],
+        ['IndependentConfigMsgHandler', 'msg={"deviceNoList":', '"paramName"', '"paramValue"'],
         end='@结束@'
     )
     tool.mark_status()

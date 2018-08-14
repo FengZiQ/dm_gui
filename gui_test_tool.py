@@ -15,6 +15,7 @@ class GUITestTool(object):
 
     server = config_data['server']
 
+    # 登录
     def __init__(self, base_url=server):
         # login user and username
         self.user = config_data['username']
@@ -36,12 +37,21 @@ class GUITestTool(object):
         self.driver.find_element_by_id("password").send_keys(self.password)
         # self.driver.find_element_by_id("captcha").send_keys('123456')
         self.driver.find_element_by_id("loginSubmit").click()
-        time.sleep(5)
+        if_login = self.wait_for_element(
+            'accountName',
+            '登陆者身份',
+            locator=By.ID
+        )
+        if if_login != config_data['username']:
+            testlink('登录失败！\n')
+        else:
+            time.sleep(5)
 
     """
     locator type: 
     By.ID,By.NAME,By.CLASS_NAME,By.TAG_NAME,By.LINK_TEXT,By.PARTIAL_LINK_TEXT,By.XPATH,By.CSS_SELECTOR
     """
+    # 鼠标左键
     def click_action(self, path, location, locator=By.XPATH, response_time=3):
         try:
             self.driver.find_element(locator, path).click()
@@ -52,6 +62,7 @@ class GUITestTool(object):
             all_logs(location + ' is not found')
             testlink(location + ' is not found')
 
+    # 填写文本框
     def fill_action(self, path, value, location, locator=By.XPATH, response_time=1):
 
         try:
@@ -64,9 +75,10 @@ class GUITestTool(object):
             all_logs(location + ' is not found')
             testlink(location + ' is not found')
 
+    # 等待元素出现并获取其的文本
     def wait_for_element(self, path, location, locator=By.XPATH):
         text = ''
-        for i in range(10):
+        for i in range(30):
             try:
                 if self.driver.find_element(locator, path):
                     text += self.driver.find_element(locator, path).text
@@ -81,7 +93,7 @@ class GUITestTool(object):
 
         return text
 
-    # 每条case的最后一个断言end = '@结束@'
+    # 断言特定值与元素的文本相等；每条case的最后一个断言end = '@结束@'
     def equal_text_assert(self, path, location, expected_text, end='', locator=By.XPATH):
         try:
             all_logs('期望结果: ' + location + ': ' + expected_text)
@@ -98,7 +110,7 @@ class GUITestTool(object):
             testlink(end)
             all_logs(location + ' is not found\n')
 
-    # 每条case的最后一个断言end = '@结束@'
+    # 断言某些文本出现在元素的文本中；每条case的最后一个断言end = '@结束@'
     def contained_text_assert(self, path, location, expected_text=list(), end='', locator=By.XPATH):
         try:
             all_logs('期望结果: ' + location + '包括: ' + str(expected_text))
@@ -116,7 +128,7 @@ class GUITestTool(object):
             testlink(end)
             all_logs(location + ' is not found\n')
 
-    # 每条case的最后一个断言end = '@结束@'
+    # 断言某些文本没有出现在元素的文本中；每条case的最后一个断言end = '@结束@'
     def no_text_assert(self, path, location, expected_text=list(), end='', locator=By.XPATH):
         try:
             all_logs('期望结果: ' + location + '中不包括' + str(expected_text))
@@ -134,6 +146,7 @@ class GUITestTool(object):
             testlink(end)
             all_logs(location + ' is not found\n')
 
+    # 断言某个元素不存在；每条case的最后一个断言end = '@结束@'
     def element_not_exist_assert(self, path, location, end='', locator=By.XPATH):
         try:
             all_logs('期望结果: ' + location + '不存在')
@@ -148,6 +161,17 @@ class GUITestTool(object):
             testlink(location + ' 存在')
             testlink(end)
 
+    # 断言操作是否触发了log生成；每条case的最后一个断言end = '@结束@'
+    def log_assert(self, log_text, expected_text=list(), end=''):
+        all_logs('期望结果：操作触发生成的log中包括' + str(expected_text))
+        for text in expected_text:
+            if text not in log_text:
+                self.FailedFlag = True
+        all_logs('实际结果：操作触发生成的log:\n' + log_text)
+        testlink('操作触发生成的log:\n' + log_text)
+        testlink(end)
+
+    # 标记case执行通过状态
     def mark_status(self):
 
         if self.FailedFlag:

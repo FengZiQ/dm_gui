@@ -1,6 +1,7 @@
 # coding=utf-8
 from gui_test_tool import *
 from api_condition import *
+from view_log import view_log
 
 tool = GUITestTool()
 
@@ -64,11 +65,21 @@ def one_device_issue():
         locator=By.CLASS_NAME,
         response_time=1
     )
-    # 断言
+    # 断言提示消息
     tool.equal_text_assert(
         '/html/body/div/div/span/p',
         '提示消息',
-        '设备下发成功',
+        '设备下发成功'
+    )
+    time.sleep(5)
+    # 断言log是否触发
+    cmd = 'tail -50f /data/log/inspos-dm-ppcp2.log | grep "4113180400130999"'
+    log_content = {'text': view_log(config_data['log_server1'], cmd)}
+    if len(log_content['text']) <= len(cmd):
+        log_content['text'] = view_log(config_data['log_server2'], cmd)
+    tool.log_assert(
+        log_content['text'],
+        ['ParamListMsgEvent', 'msg={"deviceNoList":', '"paramListId"'],
         end='@结束@'
     )
 
@@ -124,11 +135,21 @@ def file_issue():
         locator=By.CLASS_NAME,
         response_time=1
     )
-    # 断言
+    # 断言提示消息
     tool.equal_text_assert(
         '/html/body/div/div/span/p',
         '提示消息',
-        '设备下发成功',
+        '设备下发成功'
+    )
+    time.sleep(5)
+    # 断言log是否触发
+    cmd = 'tail -50f /data/log/inspos-dm-ppcp2.log | grep "4113180400130999"'
+    log_content = {'text': view_log(config_data['log_server1'], cmd)}
+    if len(log_content['text']) <= len(cmd):
+        log_content['text'] = view_log(config_data['log_server2'], cmd)
+    tool.log_assert(
+        log_content['text'],
+        ['ParamListMsgEvent', 'msg={"deviceNoList":', '"paramListId"'],
         end='@结束@'
     )
 

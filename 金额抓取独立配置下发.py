@@ -1,6 +1,7 @@
 # coding=utf-8
 from gui_test_tool import *
 from api_condition import *
+from view_log import view_log
 
 tool = GUITestTool()
 
@@ -46,7 +47,16 @@ def sum_self_config_issue():
     tool.equal_text_assert(
         '/html/body/div/div/span/p',
         '提示消息',
-        '配置下发成功',
+        '配置下发成功'
+    )
+    # 断言log是否触发
+    cmd = 'tail -50f /data/log/inspos-dm-ppcp2.log | grep "4113180400130999"'
+    log_content = {'text': view_log(config_data['log_server1'], cmd)}
+    if len(log_content['text']) <= len(cmd):
+        log_content['text'] = view_log(config_data['log_server2'], cmd)
+    tool.log_assert(
+        log_content['text'],
+        ['DeviceConfigHandler', 'msg=[{"deviceId":'],
         end='@结束@'
     )
     tool.mark_status()

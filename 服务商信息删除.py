@@ -7,23 +7,19 @@ tool = GUITestTool()
 
 def delete():
     # 前置条件：新增一个服务商
-    cus_id = new_customer('test_测试服务商#')
+    cus_id = new_customer('test_测试服务商删除')
 
     # 点击服务商管理
     tool.click_action(
         '/html/body/div[1]/div[2]/ul/li[2]/a',
         '服务商管理'
     )
-    # 查询得到新增的服务商作为修改对象
+    # 服务商名称输入框输入：test_测试服务商删除
     tool.fill_action(
         'customerName',
-        'test_测试服务商#',
+        'test_测试服务商删除',
         '服务商名称框',
         By.ID
-    )
-    tool.click_action(
-        '//option[@value="sadmin"]',
-        '选择sadmin'
     )
     tool.click_action(
         'querybtn',
@@ -39,8 +35,8 @@ def delete():
     tool.click_action(
         '//button[@class="ok"]',
         '确定按钮',
-        By.XPATH,
-        1
+        locator=By.XPATH,
+        response_time=1
     )
 
     # 断言
@@ -53,8 +49,8 @@ def delete():
         'fontbold',
         'list count',
         '0',
-        '@结束@',
-        By.CLASS_NAME
+        end='@结束@',
+        locator=By.CLASS_NAME
     )
 
     # cases执行结果

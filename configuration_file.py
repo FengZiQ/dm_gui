@@ -7,7 +7,9 @@ def config():
         'server': 'http://dm.preo.inspos.cn/',
         'file_path': 'D:\\script\\gui_test\\dm_gui\\upload_file\\',
         'pwd': '123321qwe',
-        'username': 'admin'
+        'username': 'admin',
+        'log_server1': 'ppcp1o',
+        'log_server2': 'ppcp2o'
     }
 
     return data

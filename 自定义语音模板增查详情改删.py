@@ -9,7 +9,7 @@ cus_id = new_customer('test_测试语音模板服务商')
 
 
 def add_self_scene_mode():
-    # 进入系统定制页
+    # 进入自定义语音模板页
     tool.click_action(
         '//*[@id="leftNav"]/li[5]',
         '系统定制标签'

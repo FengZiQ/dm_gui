@@ -1,6 +1,7 @@
 # coding=utf-8
 from gui_test_tool import *
 from api_condition import *
+from view_log import view_log
 
 tool = GUITestTool()
 
@@ -77,76 +78,21 @@ def one_device_issue():
         By.CLASS_NAME,
         response_time=1
     )
-    # 断言
+    # 断言提示消息
     tool.equal_text_assert(
         '/html/body/div/div/span/p',
         '提示消息',
-        '设备下发成功',
-        '@结束@'
+        '设备下发成功'
     )
-
-
-def multiple_device_issue():
-    # 查询
-    tool.fill_action(
-        'serialNum',
-        device_info[0]['serialNum'],
-        '设备编号输入框',
-        locator=By.ID
-    )
-    # 点击查询按钮
-    tool.click_action(
-        'querybtn',
-        '查询按钮',
-        locator=By.ID
-    )
-    # 进入下发页面
-    tool.click_action(
-        '//a[@title="下发设备列表"]',
-        '下发设备列表图标'
-    )
-    # 每页条数选择100
-    tool.click_action(
-        '//div/div[4]/select/option[5]',
-        '选择每页100',
-        response_time=5
-    )
-    # 产品类型选择Inspos系列
-    tool.click_action(
-        '//select[@id="productType"]/option[3]',
-        '产品类型下拉列表，选择Inspos系列',
-        response_time=5
-    )
-    # 设备类型选择加强版
-    tool.click_action(
-        '//select[@id="queryDeviceType"]/option[5]',
-        '设备类型下拉列表，选择加强版',
-        response_time=5
-    )
-    # 选定设备
-    tool.click_action(
-        '//table/tbody/tr/th[1]/div/ins',
-        '选定设备复选框'
-    )
-    # 点击确认下发
-    tool.click_action(
-        'addDeviceBtn',
-        '确认下发按钮',
-        By.CLASS_NAME
-    )
-    # 点击确定按钮
-    tool.click_action(
-        'ok',
-        '提示框的确定按钮',
-        By.CLASS_NAME,
-        response_time=1
-    )
-    # 断言
-    tool.equal_text_assert(
-        '/html/body/div/div/span/p',
-        '提示消息',
-        '设备下发成功',
-        '@结束@'
+    # 断言log是否触发
+    cmd = 'tail -50f /data/log/inspos-dm-ppcp2.log | grep ' + device_info[0]['serialNum']
+    log_content = {'text': view_log(config_data['log_server1'], cmd)}
+    if len(log_content['text']) <= len(cmd):
+        log_content['text'] = view_log(config_data['log_server2'], cmd)
+    tool.log_assert(
+        log_content['text'],
+        ['PayChannelHandler', 'msg={"channelId":'],
+        end='@结束@'
     )
 
 
@@ -209,8 +155,17 @@ def file_issue():
     tool.equal_text_assert(
         '/html/body/div/div/span/p',
         '提示消息',
-        '设备下发成功',
-        '@结束@'
+        '设备下发成功'
+    )
+    # 断言log是否触发
+    cmd = 'tail -50f /data/log/inspos-dm-ppcp2.log | grep ' + device_info[0]['serialNum']
+    log_content = {'text': view_log(config_data['log_server1'], cmd)}
+    if len(log_content['text']) <= len(cmd):
+        log_content['text'] = view_log(config_data['log_server2'], cmd)
+    tool.log_assert(
+        log_content['text'],
+        ['PayChannelHandler', 'msg={"channelId":'],
+        end='@结束@'
     )
 
 
@@ -288,14 +243,22 @@ def batch_issue():
     tool.equal_text_assert(
         '/html/body/div/div/span/p',
         '提示消息',
-        '设备下发成功',
-        '@结束@'
+        '设备下发成功'
+    )
+    # 断言log是否触发
+    cmd = 'tail -50f /data/log/inspos-dm-ppcp2.log | grep 4113180400130999'
+    log_content = {'text': view_log(config_data['log_server1'], cmd)}
+    if len(log_content['text']) <= len(cmd):
+        log_content['text'] = view_log(config_data['log_server2'], cmd)
+    tool.log_assert(
+        log_content['text'],
+        ['PayChannelHandler', 'msg={"channelId":'],
+        end='@结束@'
     )
 
 
 if __name__ == "__main__":
     one_device_issue()
-    multiple_device_issue()
     file_issue()
     batch_issue()
     tool.mark_status()

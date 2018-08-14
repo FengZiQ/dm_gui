@@ -1,6 +1,7 @@
 # coding=utf-8
 from gui_test_tool import *
 from api_condition import *
+from view_log import view_log
 
 tool = GUITestTool()
 
@@ -19,7 +20,7 @@ upload_excel_file(
     [device_info[i]['serialNum'] for i in range(len(device_info))],
     config_data['file_path'] + '全局配置批量下发.xls'
 )
-# 增加一个名为“全局配置查询测试”的全局配置
+# 增加一个名为“全局配置下发测试”的全局配置
 config_id = add_global_config('全局配置下发测试')
 
 
@@ -83,11 +84,20 @@ def device_no_issue():
         By.CLASS_NAME,
         response_time=2
     )
-    # 断言
+    # 断言提示消息
     tool.equal_text_assert(
         '/html/body/div/div/span/p',
         '提示消息',
-        '配置下发成功',
+        '配置下发成功'
+    )
+    # 断言log是否触发
+    cmd = 'tail -50f /data/log/inspos-dm-ppcp2.log | grep ' + device_info[0]['serialNum']
+    log_content = {'text': view_log(config_data['log_server1'], cmd)}
+    if len(log_content['text']) <= len(cmd):
+        log_content['text'] = view_log(config_data['log_server2'], cmd)
+    tool.log_assert(
+        log_content['text'],
+        ['DeviceCommonConfigHandler', 'msg={"configId":'],
         end='@结束@'
     )
 
@@ -136,11 +146,20 @@ def file_batch_issue():
         locator=By.CLASS_NAME,
         response_time=1
     )
-    # 断言
+    # 断言提示消息
     tool.equal_text_assert(
         '/html/body/div/div/span/p',
         '提示消息',
-        '配置下发成功',
+        '配置下发成功'
+    )
+    # 断言log是否触发
+    cmd = 'tail -50f /data/log/inspos-dm-ppcp2.log | grep ' + device_info[0]['serialNum']
+    log_content = {'text': view_log(config_data['log_server1'], cmd)}
+    if len(log_content['text']) <= len(cmd):
+        log_content['text'] = view_log(config_data['log_server2'], cmd)
+    tool.log_assert(
+        log_content['text'],
+        ['DeviceCommonConfigHandler', 'msg={"configId":'],
         end='@结束@'
     )
 
