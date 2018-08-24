@@ -8,7 +8,7 @@ config_data = {
     'username': 'admin',
     'log_server1': 'dm1t',
     'log_server2': 'dm2t',
-    # nexus.2dupay.com/liuming/Inspiry2018
+
     'log_server': '192.168.20.37',
     'log_username': 'tanyq',
     'log_pwd': 'Inspiry2017'
