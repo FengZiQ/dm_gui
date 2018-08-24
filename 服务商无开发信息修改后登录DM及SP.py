@@ -34,7 +34,7 @@ def precondition():
                 "address": "北京海淀区上地西路六号",
                 "sales_id": "595",
                 "enableStatus": "1",
-                "roleIds": [54, 161, 167],
+                "roleIds": [54, 151],
                 "type": "1",
                 "platform": "1"
             }

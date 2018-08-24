@@ -1,6 +1,7 @@
 # coding=utf-8
 from api_condition import *
 from gui_test_tool import *
+from selenium.webdriver.common.keys import Keys
 
 
 def precondition():
@@ -42,8 +43,7 @@ def device_query():
         'fontbold',
         'list count',
         '1',
-        '',
-        By.CLASS_NAME
+        locator=By.CLASS_NAME
     )
     tool.equal_text_assert(
         '//table/tbody/tr/td[2]/a',
@@ -56,20 +56,30 @@ def device_query():
         '',
         '设备编号输入框'
     )
-    # 服务商选择测试账户
+    # 服务商选择：测试账户
     tool.click_action(
-        '/html/body/div/div/div/div/div[1]/div/button',
-        '服务商名称下拉列表'
+        '//button[@data-id="customerId"]',
+        '服务商选择下拉按钮'
     )
-    tool.click_action(
-        '/html/body/div/div/div/div/div/div/div/ul/li[22]/a',
-        '选择测试账户'
+    # 搜索服务商
+    tool.fill_action(
+        '//input[@aria-label="Search"]',
+        '测试账户',
+        '服务商搜索框'
     )
-    # 断言
+    # 回车选定
+    tool.fill_action(
+        '//input[@aria-label="Search"]',
+        Keys.ENTER,
+        '服务商搜索框',
+        response_time=3
+    )
+    # 断言：查询结果列表中不包括['北京意锐新创科技有限公司', '测试设备专用账户']
     tool.no_text_assert(
-        '/html/body/div/div/div/div/div[4]',
-        '表格',
+        'devicesTable',
+        '查询结果列表',
         ['北京意锐新创科技有限公司', '测试设备专用账户'],
+        locator=By.ID
     )
 
     # 产品类型选择“国际版”
@@ -77,11 +87,12 @@ def device_query():
         '/html/body/div/div/div/div/div/select[1]/option[4]',
         '产品类型下拉列表'
     )
-    # 断言
+    # 断言：查询结果列表中不包括['条码扫描设备', 'Inspos系列', '专销产品', '配件']
     tool.no_text_assert(
-        '/html/body/div/div/div/div/div[4]',
-        '表格',
-        ['条码扫描设备', 'Inspos系列', '专销产品', '配件']
+        'devicesTable',
+        '查询结果列表',
+        ['条码扫描设备', 'Inspos系列', '专销产品', '配件'],
+        locator=By.ID
     )
 
     # 设备类型选择“RC”
@@ -89,23 +100,26 @@ def device_query():
         '/html/body/div/div/div/div/div/select[2]/option[2]',
         '设备类型下拉列表'
     )
-    # 断言
+    # 断言：查询结果列表中不包括['加强版', '基础版', '兼容版', '闪票小盒', '外设产品', '公交扫码设备']
     tool.no_text_assert(
-        '/html/body/div/div/div/div/div[4]',
-        '表格',
+        'devicesTable',
+        '查询结果列表',
         ['加强版', '基础版', '兼容版', '闪票小盒', '外设产品', '公交扫码设备'],
+        locator=By.ID
     )
+
     # 连接状态选择“已连接”
     tool.click_action(
         '/html/body/div/div/div/div/div/select[3]/option[2]',
         '连接状态下拉框'
     )
     # 断言
-    tool.contained_text_assert(
-        '/html/body/div/div/div/div/div/div/span',
-        'list count',
-        ['0'],
-        '@结束@'
+    tool.equal_text_assert(
+        'devicesTable',
+        '查询结果列表',
+        '查询不到数据!',
+        end='@结束@',
+        locator=By.ID
     )
     tool.mark_status()
     tool.finished()

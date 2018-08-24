@@ -57,6 +57,7 @@ def upgrade_patch_query():
             '强制更新', '循环升级', '未发布'
         ]
     )
+    tool.driver.refresh()
     # 查询
     tool.fill_action(
         'softName',
@@ -82,21 +83,12 @@ def upgrade_patch_query():
         '1',
         locator=By.CLASS_NAME
     )
-    tool.equal_text_assert(
-        '//table/tbody/tr/td[2]',
-        '软件类型',
-        '固件'
-    )
-    tool.equal_text_assert(
-        '//table/tbody/tr/td[3]',
-        '版本类型',
-        'A5-System'
-    )
-    tool.equal_text_assert(
-        '//table/tbody/tr/td[4]',
-        '版本号',
-        '4.0.35.1',
-        end="@结束@"
+    tool.contained_text_assert(
+        'softwareUpgradTable',
+        '查询结果列表',
+        ['固件', 'A5-System', '4.0.35.1'],
+        end="@结束@",
+        locator=By.ID
     )
 
     tool.mark_status()

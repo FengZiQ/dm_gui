@@ -67,7 +67,8 @@ def device_firmware_upgrade():
     tool.click_action(
         'firmware',
         '固件升级按钮',
-        locator=By.ID
+        locator=By.ID,
+        response_time=5
     )
     time.sleep(3)
     # 版本类型选择：A5-System
@@ -121,12 +122,22 @@ def device_firmware_upgrade():
         '提示消息',
         '升级指令已下发到您指定的1台设备。'
     )
+    time.sleep(3)
     # 点击推送升级时间下拉框
     tool.click_action(
         '//*[@id="searchDateRange"]',
         '推送升级时间下拉框'
     )
-    time.sleep(3)
+    flag = tool.wait_for_element(
+        '//div[@class="ranges"]/ul/li[4]',
+        '自定义图标'
+    )
+    if not flag:
+        # 点击推送升级时间下拉框
+        tool.click_action(
+            '//*[@id="searchDateRange"]',
+            '推送升级时间下拉框'
+        )
     # 点击自定义图标
     tool.click_action(
         '//div[@class="ranges"]/ul/li[4]',

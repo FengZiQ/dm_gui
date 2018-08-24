@@ -73,13 +73,13 @@ def one_device_issue():
     )
     time.sleep(5)
     # 断言log是否触发
-    cmd = 'tail -50f /data/log/inspos-dm-ppcp2.log | grep "4113180400130999"'
+    cmd = 'tail -n 500 /data/log/inspos-dm-ppcp2.log | grep "4113180400130999"'
     log_content = {'text': view_log(config_data['log_server1'], cmd)}
-    if len(log_content['text']) <= len(cmd):
+    if len(log_content['text']) <= len(cmd) or 'paramId' not in log_content:
         log_content['text'] = view_log(config_data['log_server2'], cmd)
     tool.log_assert(
         log_content['text'],
-        ['ParamListMsgEvent', 'msg={"deviceNoList":', '"paramListId"'],
+        ['msg={"deviceNoList":', '"paramId"'],
         end='@结束@'
     )
 
@@ -143,13 +143,13 @@ def file_issue():
     )
     time.sleep(5)
     # 断言log是否触发
-    cmd = 'tail -50f /data/log/inspos-dm-ppcp2.log | grep "4113180400130999"'
+    cmd = 'tail -n 500 /data/log/inspos-dm-ppcp2.log | grep "4113180400130999"'
     log_content = {'text': view_log(config_data['log_server1'], cmd)}
-    if len(log_content['text']) <= len(cmd):
+    if len(log_content['text']) <= len(cmd) or 'paramId' not in log_content:
         log_content['text'] = view_log(config_data['log_server2'], cmd)
     tool.log_assert(
         log_content['text'],
-        ['ParamListMsgEvent', 'msg={"deviceNoList":', '"paramListId"'],
+        ['msg={"deviceNoList":', '"paramId"'],
         end='@结束@'
     )
 

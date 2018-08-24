@@ -26,10 +26,9 @@ def my_device_operation():
     )
     # 点击设备详情刷新图标
     tool.click_action(
-        '//table/tbody/tr/td[8]/a[2]/i',
+        '//a[@title="设备详情刷新"]',
         '设备详情刷新图标',
-        By.XPATH,
-        1
+        response_time=1
     )
     # 断言
     tool.equal_text_assert(
@@ -37,9 +36,10 @@ def my_device_operation():
         '提示消息',
         '刷新状态成功'
     )
+
     # 点击详情图标
     tool.click_action(
-        '//table/tbody/tr/td[8]/a[1]/i',
+        '//a[@title="详情"]',
         '详情图标'
     )
     # 断言
@@ -49,58 +49,51 @@ def my_device_operation():
         '设备所有信息显示区域',
         ['4113180400130999', expected_refresh_time],
     )
+
     # 返回设备列表
     tool.click_action(
-        '/html/body/div[2]/div[2]/div[1]/span[2]/div/a[1]',
-        '设备列表返回链接'
+        '//*[@id="leftNav"]/li[3]/ul/li[2]',
+        '我的设备标签',
     )
     # 点击设备号，进入设备详情
     tool.click_action(
         '//table/tbody/tr[1]/td[2]/a',
         '设备号(设备详情链接)'
     )
-    # 断言
-    tool.equal_text_assert(
-        '/html/body/div/div/div/div/div/div/div/div[1]/div[1]/b',
-        '设备版本显示区域',
-        '设备版本'
-    )
+    # 断言：设备版本信息包含['设备编号', '销售日期', '激活日期', '保修期', '延保期']
     tool.contained_text_assert(
-        '/html/body/div/div/div/div/div/div/div/div[1]/div[2]/span[2]',
-        '销售日期显示区域',
-        ['销售日期:']
+        'detailDeviceId',
+        '设备版本信息显示区域',
+        ['设备编号', '销售日期', '激活日期', '保修期', '延保期'],
+        locator=By.ID
     )
+
+    # 断言：设备版本信息包含['app', 'kernel', 'rootfs', 'uboot']
     tool.contained_text_assert(
-        '/html/body/div/div/div/div/div/div/div/div[1]/div[2]/span[3]',
-        '激活日期显示区域',
-        ['激活日期:']
+        'versionTBody',
+        '设备版本信息显示区域',
+        ['app', 'kernel', 'rootfs', 'uboot'],
+        locator=By.ID
     )
+
+    # 断言：设备连接历史列表
+    time_c = time.strftime('%Y-%m')
     tool.contained_text_assert(
-        '/html/body/div/div/div/div/div/div/div/div[1]/div[2]/span[4]',
-        '保修期显示区域',
-        ['保修期:']
+        'historyTbody',
+        '设备连接历史列表',
+        [time_c],
+        locator=By.ID
     )
-    tool.equal_text_assert(
-        '/html/body/div/div/div/div/div/div/div/div[2]/div[1]/b',
-        '设备连接历史列表显示区域',
-        '设备连接历史列表'
-    )
-    tool.equal_text_assert(
-        '/html/body/div/div/div/div/div/div/div/div[3]/div[1]/b',
+
+    # 断言：设位置信息包含 ['设备所在地址', ' IP地址']
+    tool.contained_text_assert(
+        'ipLocation',
         '位置信息显示区域',
-        '位置信息'
+        ['设备所在地址', ' IP地址'],
+        end='@结束@',
+        locator=By.ID
     )
-    tool.contained_text_assert(
-        '/html/body/div/div/div/div/div/div/div/div[3]/div[2]/span[1]',
-        '设备所在地址显示区域',
-        ['中国', '北京']
-    )
-    tool.contained_text_assert(
-        '/html/body/div/div/div/div/div/div/div/div[3]/div[2]/span[2]',
-        'IP地址显示区域',
-        ['1', '.'],
-        '@结束@'
-    )
+
     tool.mark_status()
     tool.finished()
 

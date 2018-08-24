@@ -40,7 +40,7 @@ def customer_info(customer_name):
 
 
 # 创建一个服务商
-def new_customer(customer_name):
+def new_customer(customer_name, role_id=54, tp='1'):
     try:
         res = session.post(
             server + 'customer/add',
@@ -49,17 +49,18 @@ def new_customer(customer_name):
                 "name": customer_name,
                 "abb": "for_testing" + str(random.randint(0, 100)),
                 "token": "",
-                "userName": "for_t" + str(random.randint(0, 100)),
+                "userName": "for_test",
                 "password": "123456",
-                "contact": "fzq",
-                "mobile": "00000000",
-                "mail": "00@00000",
-                "address": "00",
+                "contact": "测试账户",
+                "mobile": "15731659260",
+                "mail": "1665987439@qq.com",
+                "address": "北京海淀",
                 "sales_id": "1087",
-                "type": "1",
+                "type": tp,
                 "platform": "1",
+                "locale": "CN",
                 "enableStatus": "1",
-                "roleIds": [54, 153]
+                "roleIds": [role_id]
             }
         )
         temp = json.loads(res.text)
@@ -300,6 +301,19 @@ def add_self_config_mode(customer_id, config_name):
         )
         temp = json.loads(res.text)
         return temp['data']
+    except:
+        pass
+
+
+# 获取自定义配置模板信息
+def get_self_config_mode_info(mode_name):
+    try:
+        res = session.get(
+            server + 'paramListTemplate/pageList?templateName=' + mode_name
+        )
+        temp = json.loads(res.text)
+        mode_info = temp['data']['list'][0]
+        return mode_info
     except:
         pass
 
@@ -605,7 +619,7 @@ def del_log_config(config_id):
 if __name__ == "__main__":
     # print(get_unsold_device_info())
     # print(customer_info('测试账户'))
-    # print(new_customer('test_customer'))
+    print(new_customer('test_测试自定义配置模板'))
     # delete_customer(new_customer('test_customer'))
     # upload_excel_file(get_unsold_device_info())
     # unbind_device()
@@ -623,6 +637,6 @@ if __name__ == "__main__":
     # print(get_self_common_config_id('testtest'))
     # del_self_common_config(163)
     # get_self_batch_config_id('4113180400130999')
-    print(get_receipt_config_id('测试_fengziqi'))
+    # print(get_receipt_config_id('测试_fengziqi'))
 
 

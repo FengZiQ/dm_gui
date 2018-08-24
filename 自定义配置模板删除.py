@@ -6,7 +6,7 @@ tool = GUITestTool()
 
 # 前置条件：创建一个服务商“测试自定义配置模板”，基于该服务商新增一个自定义配置
 cus_id = new_customer('测试自定义配置模板')
-self_config_id = add_self_config_mode(cus_id, 'selenium_测试自定义配置模板')
+self_config_mode_id = add_self_config_mode(cus_id, 'selenium_测试自定义配置模板')
 
 
 def self_config_del():
@@ -58,4 +58,5 @@ if __name__ == "__main__":
     tool.mark_status()
     tool.finished()
     # 清理环境
+    del_self_config_mode(self_config_mode_id, cus_id)
     delete_customer(cus_id)

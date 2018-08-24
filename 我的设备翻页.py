@@ -15,6 +15,7 @@ def page_turning():
         '//*[@id="leftNav"]/li[3]/ul/li[2]',
         '我的设备标签',
     )
+    time.sleep(3)
     # 断言数据
     list_count = tool.wait_for_element(
         'fontbold',
@@ -32,7 +33,8 @@ def page_turning():
 
     tool.click_action(
         '//div/div[5]/select/option[5]',
-        '选择每页100'
+        '选择每页100',
+        response_time=5
     )
 
     tool.contained_text_assert(
@@ -43,7 +45,8 @@ def page_turning():
 
     tool.click_action(
         '//div/div[5]/div/li[12]/a',
-        '点击下一页'
+        '点击下一页',
+        response_time=5
     )
     next_page_data = tool.wait_for_element(
         '//table/tbody/tr[1]/td[2]',
@@ -63,7 +66,8 @@ def page_turning():
     )
     tool.click_action(
         '//div/div[5]/div/div/button',
-        '翻页确定按钮'
+        '翻页确定按钮',
+        response_time=5
     )
     last_page_data = tool.wait_for_element(
         '//table/tbody/tr[1]/td[2]',

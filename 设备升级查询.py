@@ -43,6 +43,11 @@ def device_upgrade_query():
         '查询结果',
         ['北京意锐新创科技有限公司', '未连接']
     )
+    # 连接状态选择“全部”
+    tool.click_action(
+        '//select[@id="connectState"]/option[1]',
+        '接状态选择已连接'
+    )
     # 查询
     tool.fill_action(
         'queryDeviceId',

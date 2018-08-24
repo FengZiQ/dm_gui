@@ -4,9 +4,7 @@
 import requests
 import re
 from url_para import para
-from configuration_file import config
-
-config_data = config()
+from configuration_file import config_data
 
 
 def login_api():

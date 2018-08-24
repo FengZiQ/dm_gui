@@ -56,7 +56,7 @@ def add_by_one_device_no():
     )
     # 点击导入按钮
     tool.click_action(
-        '//form[@id="myupload"]/div[1]/div[2]/button',
+        '//form[@id="myupload"]/div[1]/div[2]/div/button',
         '导入按钮'
     )
     # 断言
@@ -113,7 +113,7 @@ def file_issue():
     )
     # 点击导入按钮
     tool.click_action(
-        '//form[@id="myupload"]/div[1]/div[2]/button',
+        '//form[@id="myupload"]/div[1]/div[2]/div/button',
         '导入按钮'
     )
     # 断言

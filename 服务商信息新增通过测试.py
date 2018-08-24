@@ -104,9 +104,8 @@ def add_service_provider():
     # 点击保存后，如果睡眠时间过长将导致提示信息丢失
     tool.click_action(
         '//form/div/button[@class="saveBtn"]',
-        '保存',
-        By.XPATH,
-        1
+        '保存按钮',
+        response_time=1
     )
 
     # 断言
@@ -115,13 +114,16 @@ def add_service_provider():
         '提示消息',
         '新增服务商信息成功'
     )
-    tool.equal_text_assert(
-        'fontbold',
-        'list count',
-        str(int(before_list_count) + 1),
-        '@结束@',
-        By.CLASS_NAME
-    )
+    try:
+        tool.equal_text_assert(
+            'fontbold',
+            'list count',
+            str(int(before_list_count) + 1),
+            end='@结束@',
+            locator=By.CLASS_NAME
+        )
+    except:
+        pass
 
     # cases执行结果
     tool.mark_status()

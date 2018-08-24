@@ -1,6 +1,7 @@
 # coding=utf-8
 from gui_test_tool import *
 from api_condition import *
+from selenium.webdriver.common.keys import Keys
 
 
 def add_upgrade_patch():
@@ -87,14 +88,23 @@ def add_upgrade_patch():
                 test_data['upgrade_type'][i] + 'radio'
             )
         time.sleep(3)
-        # 选择所属服务商：北京意锐新创科技有限公司
+        # 服务商选择：测试账户
         tool.click_action(
-            '//button[@title="请选择服务商"]',
+            '//form/div[8]/div/div/button',
             '服务商下拉列表'
         )
-        tool.click_action(
-            '//div[@id="multipleChoice"]/div/div/div/ul/li[1]',
-            '选择北京意锐新创科技有限公司'
+        # 搜索服务商
+        tool.fill_action(
+            '//input[@aria-label="Search"]',
+            '测试账户',
+            '服务商搜索框'
+        )
+        # 回车选定
+        tool.fill_action(
+            '//input[@aria-label="Search"]',
+            Keys.ENTER,
+            '服务商搜索框',
+            response_time=3
         )
         tool.click_action(
             'markSure',

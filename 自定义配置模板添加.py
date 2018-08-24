@@ -5,8 +5,8 @@ from selenium.webdriver.common.keys import Keys
 
 tool = GUITestTool()
 
-# 前置条件：创建一个服务商：测试自定义配置模板
-cus_id = new_customer('测试自定义配置模板')
+# 前置条件：创建一个服务商：test_测试自定义配置模板
+cus_id = new_customer('test_测试自定义配置模板')
 
 
 def return_button():
@@ -56,7 +56,7 @@ def pass_case():
     # 搜索服务商
     tool.fill_action(
         '//input[@aria-label="Search"]',
-        '测试自定义配置模板',
+        'test_测试自定义配置模板',
         '服务商搜索框'
     )
     # 回车选定
@@ -117,7 +117,6 @@ def pass_case():
         '新增自定义通用配置模板信息成功',
         end='@结束@'
     )
-    # 清理环境
     delete_customer(cus_id)
 
 
@@ -151,4 +150,6 @@ if __name__ == "__main__":
     service_testing()
     tool.mark_status()
     tool.finished()
-
+    # 清理环境
+    mode_info = get_self_config_mode_info('test_for_测试')
+    del_self_config_mode(mode_info['id'], cus_id)

@@ -40,7 +40,7 @@ def sum_self_config_query():
     tool.contained_text_assert(
         'devicesTable',
         '查询结果显示区域',
-        ['4113180400130999', 'test', '测试'],
+        ['4113180400130999'],
         end='@结束@',
         locator=By.ID
     )

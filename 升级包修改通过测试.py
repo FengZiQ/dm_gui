@@ -1,6 +1,5 @@
 # coding=utf-8
 from gui_test_tool import *
-from api_condition import *
 
 
 def add_upgrade_patch():
@@ -75,20 +74,6 @@ def add_upgrade_patch():
         '//form/div[6]/div/span/label',
         '更新类型选循环升级'
     )
-    # 选择所属服务商：北京意锐新创科技有限公司
-    tool.click_action(
-        '//form/div[8]/div/div/button',
-        '服务商下拉列表'
-    )
-    tool.click_action(
-        '//div[@id="multipleChoice"]/div/div/div/ul/li[2]',
-        '北京汇元网科技股份有限公司'
-    )
-    tool.click_action(
-        'markSure',
-        '确定按钮',
-        By.ID
-    )
     # 修改发布状态
     tool.click_action(
         '//form/div[10]/div/label[2]',
@@ -144,8 +129,6 @@ def add_upgrade_patch():
 
     tool.mark_status()
     tool.finished()
-    # 清理环境
-    del_upgrade_package('测试_固件_test1_111', '200.36.36.352')
 
 
 if __name__ == "__main__":

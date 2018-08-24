@@ -32,13 +32,13 @@ def modify():
     )
     tool.fill_action(
         'name',
-        '服务商_name@$'*20,
+        '服务商_name@$'*4,
         '服务商名称',
         By.ID
     )
     tool.fill_action(
         'abb',
-        '服务商_name@$'*10,
+        '服务商_name@$',
         '服务商简称',
         By.ID
     )

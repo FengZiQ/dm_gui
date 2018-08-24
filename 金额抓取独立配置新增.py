@@ -30,7 +30,7 @@ def add_sum_self_config():
         'addbtn',
         '新增按钮',
         By.ID,
-        response_time=5
+        response_time=10
     )
     # 点击确认按钮
     tool.click_action(

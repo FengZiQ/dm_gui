@@ -50,7 +50,7 @@ def sum_self_config_issue():
         '配置下发成功'
     )
     # 断言log是否触发
-    cmd = 'tail -50f /data/log/inspos-dm-ppcp2.log | grep "4113180400130999"'
+    cmd = 'tail -n 500 /data/log/inspos-dm-ppcp2.log | grep "4113180400130999"'
     log_content = {'text': view_log(config_data['log_server1'], cmd)}
     if len(log_content['text']) <= len(cmd):
         log_content['text'] = view_log(config_data['log_server2'], cmd)

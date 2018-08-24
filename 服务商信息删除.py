@@ -36,15 +36,15 @@ def delete():
         '//button[@class="ok"]',
         '确定按钮',
         locator=By.XPATH,
-        response_time=1
+        response_time=3
     )
-
     # 断言
     tool.equal_text_assert(
         '/html/body/div/div/span/p',
         '提示消息',
-        '删除服务商信息成功'
+        '删除服务商信息成功！'
     )
+    time.sleep(3)
     tool.equal_text_assert(
         'fontbold',
         'list count',

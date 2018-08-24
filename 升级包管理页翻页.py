@@ -29,12 +29,13 @@ def page_turning():
         page_count = str(int(list_count)//10 + 1)
     except Exception as e:
         print(e)
-
+    time.sleep(3)
     tool.click_action(
         '//div/div[4]/select/option[1]',
-        '选择每页10'
+        '选择每页10',
+        response_time=5
     )
-
+    # 断言
     tool.contained_text_assert(
         '//div/div[4]/div/div',
         '页数统计标签',
@@ -42,8 +43,9 @@ def page_turning():
     )
 
     tool.click_action(
-        '//div/div[4]/div/li[10]/a',
-        '点击下一页'
+        '//div/div[4]/div/li[11]/a',
+        '点击下一页',
+        response_time=5
     )
     next_page_data = tool.wait_for_element(
         '//table/tbody/tr[1]/td[4]',
@@ -63,7 +65,8 @@ def page_turning():
     )
     tool.click_action(
         '//div/div[4]/div/div/button',
-        '翻页确定按钮'
+        '翻页确定按钮',
+        response_time=5
     )
     last_page_data = tool.wait_for_element(
         '//table/tbody/tr[1]/td[4]',

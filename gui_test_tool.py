@@ -3,9 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from to_log import *
 import time
-from configuration_file import config
+from configuration_file import config_data
 
-config_data = config()
 
 Pass = "'result': 'p'"
 Fail = "'result': 'f'"
@@ -162,13 +161,13 @@ class GUITestTool(object):
             testlink(end)
 
     # 断言操作是否触发了log生成；每条case的最后一个断言end = '@结束@'
-    def log_assert(self, log_text, expected_text=list(), end=''):
+    def log_assert(self, log_text='', expected_text=list(), end=''):
         all_logs('期望结果：操作触发生成的log中包括' + str(expected_text))
         for text in expected_text:
             if text not in log_text:
                 self.FailedFlag = True
-        all_logs('实际结果：操作触发生成的log:\n' + log_text)
-        testlink('操作触发生成的log:\n' + log_text)
+        all_logs('实际结果：操作触发生成的log:\n' + log_text.replace('[01;31m[K', '').replace('[m[K', ''))
+        testlink('操作触发生成的log:\n' + log_text.replace('[01;31m[K', '').replace('[m[K', ''))
         testlink(end)
 
     # 标记case执行通过状态

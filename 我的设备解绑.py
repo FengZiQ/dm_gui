@@ -52,7 +52,8 @@ def my_device_unbind():
     # 确认按钮
     tool.click_action(
         '//button[@class="ok"]',
-        '确认按钮'
+        '确认按钮',
+        response_time=1
     )
     # 断言
     tool.equal_text_assert(
@@ -70,16 +71,17 @@ def my_device_unbind():
         '//*[@class="searchBtn"]',
         '查询按钮'
     )
-    # 断言
-    tool.contained_text_assert(
-        '/html/body/div/div/div/div/div/div/span',
-        '我的设备中list count',
-        ['0']
+    # 断言：查询结果列表
+    tool.equal_text_assert(
+        'devicesTable',
+        '查询结果列表',
+        '查询不到数据!',
+        locator=By.ID
     )
     # 未销售列表查询
     tool.click_action(
-        '/html/body/div/div/ul/li/ul/li[1]/a',
-        '未销售列表标签'
+        '//*[@id="leftNav"]/li[3]/ul/li[1]',
+        '未销售列表标签',
     )
     tool.fill_action(
         '//*[@id="queryDeviceId"]',
