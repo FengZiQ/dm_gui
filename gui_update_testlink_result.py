@@ -11,7 +11,7 @@ tester_key = {"admin": "68f26f458e8b1d537043f76d78f815d9"}
 tlc = testlink.TestlinkAPIClient(url, tester_key["admin"])
 
 project_name = '设备管理平台'
-test_plan_name = '预上线环境_0820'
+test_plan_name = '9.11评审'
 first_menu = ['设备首页', '服务商管理', '设备管理', '配置管理', '用户管理', '系统管理', '数据统计']
 
 
