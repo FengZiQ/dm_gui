@@ -30,8 +30,9 @@ def contained_text_assert(actual_result, expected_text=list(), end='', state='')
 # 查询结果为空断言
 def no_data_assert(result, end='', state=''):
     all_logs(state)
+    all_logs(str(result))
+    testlink(str(result))
     if result:
-        all_logs(str(result))
         all_logs(Fail + '\n')
         testlink(Fail + '\n' + end)
     else:
