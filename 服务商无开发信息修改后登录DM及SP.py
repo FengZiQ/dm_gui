@@ -18,7 +18,7 @@ def precondition():
         [device_info[i]['id'] for i in range(len(device_info))]
     )
     try:
-        a=session.post(
+        session.post(
             config_data['server'] + 'customer/modify',
             json={
                 "id": str(cus_info['id']),
