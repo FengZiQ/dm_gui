@@ -1,10 +1,27 @@
 # coding=utf-8
 from gui_test_tool import *
+from api_condition import *
 
 tool = GUITestTool()
 
 
+def precondition():
+    # 创建一个服务商
+    new_customer('test_customer0')
+    cus_info = customer_info('test_customer0')
+    # 销售设备
+    device_info = get_unsold_device_info()
+    bind_device(
+        cus_info['id'],
+        cus_info['treeId'],
+        [device_info[i]['id'] for i in range(len(device_info))]
+    )
+    return cus_info['id']
+
+
 def lack_ability_service_provider_login():
+    cus_id = precondition()
+    time.sleep(5)
     tool.click_action(
         '/html/body/div[2]/div[1]/span[4]/span',
         '注销按钮'
@@ -12,13 +29,13 @@ def lack_ability_service_provider_login():
     # 录入登录信息
     tool.fill_action(
         'username',
-        'inspos',
+        'for_test',
         '用户名输入框',
         By.ID
     )
     tool.fill_action(
         'password',
-        'inspos',
+        '123456',
         '密码输入框',
         By.ID
     )
@@ -31,7 +48,7 @@ def lack_ability_service_provider_login():
     tool.equal_text_assert(
         '//*[@id="accountName"]',
         '登录用户名label',
-        'inspos'
+        'for_test'
     )
     tool.equal_text_assert(
         '//div[1]/span[2]/a',
@@ -41,18 +58,20 @@ def lack_ability_service_provider_login():
     time.sleep(3)
     # 切换至商户管理平台
     tool.click_action(
-        '//*[@id="seriveDropdownMenu"]',
-        '切换平台下拉框'
+        'seriveDropdownMenu',
+        '切换平台下拉框',
+        locator=By.ID
     )
     tool.click_action(
-        '//*[@id="seriveDropdownMenuContent"]/li[2]/a',
-        '选择商户管理平台'
+        '//ul[@id="seriveDropdownMenuContent"]/li[2]/a',
+        '选择商户管理平台',
+        response_time=5
     )
     # 断言
     tool.equal_text_assert(
         '//*[@id="accountName"]',
         '登录用户名label',
-        'inspos'
+        'for_test'
     )
     tool.equal_text_assert(
         '//div[1]/span[2]/a',
@@ -63,6 +82,8 @@ def lack_ability_service_provider_login():
 
     tool.mark_status()
     tool.finished()
+    # 清理环境
+    delete_customer(cus_id)
 
 
 if __name__ == "__main__":

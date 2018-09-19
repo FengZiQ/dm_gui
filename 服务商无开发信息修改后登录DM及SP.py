@@ -1,6 +1,7 @@
 # coding=utf-8
 from gui_test_tool import *
 from api_condition import *
+from configuration_file import config_data
 
 tool = GUITestTool()
 
@@ -17,24 +18,24 @@ def precondition():
         [device_info[i]['id'] for i in range(len(device_info))]
     )
     try:
-        session.post(
-            'http://dm.preo.inspos.cn/customer/modify',
+        a=session.post(
+            config_data['server'] + 'customer/modify',
             json={
-                "id": cus_info['id'],
-                "treeId": cus_info['treeId'],
-                "parentId": cus_info['treeId'],
+                "id": str(cus_info['id']),
+                "treeId": str(cus_info['treeId']),
+                "parentId": str(cus_info['treeId']),
                 "name": 'test_customer1',
                 "abb": 'test_customer1',
-                "token": cus_info['treeId'],
+                "token": str(cus_info['treeId']),
                 "userName": "test_cus1",
                 "password": "test_cus1",
                 "contact": "测试账户",
                 "mobile": "15101043498",
                 "mail": "1665987439@qq.com",
                 "address": "北京海淀区上地西路六号",
-                "sales_id": "595",
+                "sales_id": str(cus_info['salesId']),
                 "enableStatus": "1",
-                "roleIds": [54, 151],
+                "roleIds": [54],
                 "type": "1",
                 "platform": "1"
             }
@@ -84,12 +85,14 @@ def lack_ability_service_provider_login():
     time.sleep(3)
     # 切换至商户管理平台
     tool.click_action(
-        '//*[@id="seriveDropdownMenu"]',
-        '切换平台下拉框'
+        'seriveDropdownMenu',
+        '切换平台下拉框',
+        locator=By.ID
     )
     tool.click_action(
-        '//*[@id="seriveDropdownMenuContent"]/li[2]/a',
-        '选择商户管理平台'
+        '//ul[@id="seriveDropdownMenuContent"]/li[2]/a',
+        '选择商户管理平台',
+        response_time=5
     )
     # 断言
     tool.equal_text_assert(

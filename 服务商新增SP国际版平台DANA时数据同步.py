@@ -4,11 +4,11 @@ from login_dm import login_api
 from configuration_file import config_data
 from conn_mysql_db import testing_connect_db
 from execute_sql import select_action
-from business_assert import contained_text_assert, no_data_assert
-
+from business_assert import BusinessAssert
 
 server = config_data['server']
 session = login_api()
+b_assert = BusinessAssert()
 
 
 # 创建服务商
@@ -85,34 +85,40 @@ def global_sp_platform_dana():
         'select * from spg_user where user_name="for_test_user"'
     )
     # 断言所有相关数据库数据同步
-    contained_text_assert(
+    b_assert.contained_text_assert(
         dm_customer,
         ['服务商平台类型测试'],
+        end='@结束@',
         state='dm_inspos库dm_customer表中包含服务商“服务商平台类型测试”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         dm_user,
         ['for_test_user'],
+        end='@结束@',
         state='dm_inspos库dm_user表中包含用户“for_test_user”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         commons_dana_customer,
         ['服务商平台类型测试'],
+        end='@结束@',
         state='commons-dana库commons_customer表中包含服务商“服务商平台类型测试”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         commons_dana_user,
         ['for_test_user'],
+        end='@结束@',
         state='commons-dana库commons_user表中包含用户“for_test_user”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         dana_customer,
         ['服务商平台类型测试'],
+        end='@结束@',
         state='sp_global_DANA库spg_customer表中包含服务商“服务商平台类型测试”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         dana_user,
         ['for_test_user'],
+        end='@结束@',
         state='sp_global_DANA库spg_user表中包含用户“for_test_user”'
     )
     # 删除服务商
@@ -145,31 +151,39 @@ def global_sp_platform_dana():
         'select * from spg_user where user_name="for_test_user"'
     )
     # 断言所有相关数据库数据同步
-    no_data_assert(
+    b_assert.no_data_assert(
         dm_customer,
+        end='@结束@',
         state='dm_inspos库dm_customer表中不包含服务商“服务商平台类型测试”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         dm_user,
+        end='@结束@',
         state='dm_inspos库dm_user表中不包含用户“for_test_user”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         commons_dana_customer,
+        end='@结束@',
         state='commons-dana库commons_customer表中不包含服务商“服务商平台类型测试”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         commons_dana_user,
+        end='@结束@',
         state='commons-dana库commons_user表中不包含用户“for_test_user”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         dana_customer,
+        end='@结束@',
         state='sp_global_DANA库spg_customer表中不包含服务商“服务商平台类型测试”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         dana_user,
         end='@结束@',
         state='sp_global_DANA库spg_user表中不包含用户“for_test_user”'
     )
+    # 标记cases状态
+    b_assert.mark_status()
+
     # 清理环境
     delete_customer(cus_id)
 

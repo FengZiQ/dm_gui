@@ -4,13 +4,14 @@ import time
 from login_dm import login_api
 from login_sg import login_sg_api
 from configuration_file import config_data
-from business_assert import contained_text_assert
+from business_assert import BusinessAssert
 
 
 dm_server = config_data['server']
 sg_server = config_data['sgServer']
 dm_session = login_api()
 sg_session = login_sg_api()
+b_assert = BusinessAssert()
 
 
 # 创建服务商
@@ -143,25 +144,30 @@ time.sleep(5)
 mer_info = get_merchant_info('test服务商用户名重复SG用户')
 sh_id = add_merchant(mer_info[0].get('id', 'no data'))
 time.sleep(3)
-user_id = add_sg_user(sh_id, 'tsg_user1')
 
+# 创建SP平台商户用户：tsp_user1
+user_id = add_sg_user(sh_id, 'tsg_user1')
 # 创建与SG平台用户重名的服务商
 cus_info1 = new_customer('commons库数据同步服务商', '简称t2', 'tsg_user1')
 # 断言
-contained_text_assert(
+b_assert.contained_text_assert(
     str(cus_info1),
     ["'code': 500", "'success': False"],
+    end='@结束@',
     state='服务商用户名与SG平台用户名重复测试'
 )
 
 # commons库数据同步问题验证
 cus_info2 = new_customer('commons库数据同步服务商', '简称2t', 'user2t')
 # 断言
-contained_text_assert(
+b_assert.contained_text_assert(
     str(cus_info2),
     ["code': 200", "'success': True"],
-    state='commons库数据同步服务商'
+    state='commons库数据同步服务商',
+    end='@结束@'
 )
+# 标记cases执行状态
+b_assert.mark_status()
 
 # 清理环境
 del_sg_user(user_id)

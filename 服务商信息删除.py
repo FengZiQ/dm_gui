@@ -29,13 +29,14 @@ def delete():
     # 点击删除按钮
     tool.click_action(
         '//table/tbody/tr[1]/td[8]/a[4]/i',
-        '删除按钮'
+        '删除按钮',
+        response_time=8
     )
     # 点击确定按钮
     tool.click_action(
-        '//button[@class="ok"]',
+        'ok',
         '确定按钮',
-        locator=By.XPATH,
+        locator=By.CLASS_NAME,
         response_time=3
     )
     # 断言

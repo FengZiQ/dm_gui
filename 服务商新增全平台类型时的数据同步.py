@@ -4,11 +4,11 @@ from login_dm import login_api
 from configuration_file import config_data
 from conn_mysql_db import testing_connect_db
 from execute_sql import select_action
-from business_assert import contained_text_assert, no_data_assert
-
+from business_assert import BusinessAssert
 
 server = config_data['server']
 session = login_api()
+b_assert = BusinessAssert()
 
 
 # 创建服务商
@@ -112,64 +112,76 @@ def all_platform():
         'select * from spg_user where user_name="for_test_user"'
     )
     # 断言所有相关数据库数据同步
-    contained_text_assert(
+    b_assert.contained_text_assert(
         dm_customer,
         ['服务商平台类型测试'],
+        end='@结束@',
         state='dm_inspos库dm_customer表中包含服务商“服务商平台类型测试”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         dm_user,
         ['for_test_user'],
+        end='@结束@',
         state='dm_inspos库dm_user表中包含用户“for_test_user”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         commons_customer,
         ['服务商平台类型测试'],
+        end='@结束@',
         state='commons库commons_customer表中包含服务商“服务商平台类型测试”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         commons_user,
         ['for_test_user'],
+        end='@结束@',
         state='commons库commons_user表中包含用户“for_test_user”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         pay_customer,
         ['服务商平台类型测试'],
+        end='@结束@',
         state='pay库pay_customer表中包含服务商“服务商平台类型测试”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         pay_user,
         ['for_test_user'],
+        end='@结束@',
         state='pay库pay_user表中包含用户“for_test_user”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         cn_customer,
         ['服务商平台类型测试'],
+        end='@结束@',
         state='sp_global库sg_customer表中包含服务商“服务商平台类型测试”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         cn_user,
         ['for_test_user'],
+        end='@结束@',
         state='sp_global库sg_user表中包含用户“for_test_user”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         commons_jp_customer,
         ['服务商平台类型测试'],
+        end='@结束@',
         state='commons-jp库commons_customer表中包含服务商“服务商平台类型测试”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         commons_jp_user,
         ['for_test_user'],
+        end='@结束@',
         state='commons-jp库commons_user表中包含用户“for_test_user”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         jp_customer,
         ['服务商平台类型测试'],
+        end='@结束@',
         state='sp_global_test库sg_customer表中包含服务商“服务商平台类型测试”'
     )
-    contained_text_assert(
+    b_assert.contained_text_assert(
         jp_user,
         ['for_test_user'],
+        end='@结束@',
         state='sp_global_test库sg_user表中包含用户“for_test_user”'
     )
     # 删除服务商
@@ -229,55 +241,68 @@ def all_platform():
         'select * from spg_user where user_name="for_test_user"'
     )
     # 断言所有相关数据库数据同步
-    no_data_assert(
+    b_assert.no_data_assert(
         dm_customer,
+        end='@结束@',
         state='dm_inspos库dm_customer表中不包含服务商“服务商平台类型测试”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         dm_user,
+        end='@结束@',
         state='dm_inspos库dm_user表中不包含用户“for_test_user”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         commons_customer,
+        end='@结束@',
         state='commons库commons_customer表中不包含服务商“服务商平台类型测试”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         commons_user,
+        end='@结束@',
         state='commons库commons_user表中不包含用户“for_test_user”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         pay_customer,
+        end='@结束@',
         state='pay库pay_customer表中不包含服务商“服务商平台类型测试”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         pay_user,
+        end='@结束@',
         state='pay库pay_user表中不包含用户“for_test_user”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         cn_customer,
+        end='@结束@',
         state='sp_global库spg_customer表中不包含服务商“服务商平台类型测试”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         cn_user,
+        end='@结束@',
         state='sp_global库spg_user表中不包含用户“for_test_user”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         commons_jp_customer,
+        end='@结束@',
         state='commons-jp库commons_customer表中不包含服务商“服务商平台类型测试”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         commons_jp_user,
+        end='@结束@',
         state='commons-jp库commons_user表中不包含用户“for_test_user”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         jp_customer,
+        end='@结束@',
         state='sp_global_test库spg_customer表中不包含服务商“服务商平台类型测试”'
     )
-    no_data_assert(
+    b_assert.no_data_assert(
         jp_user,
         end='@结束@',
         state='sp_global_test库spg_user表中不包含用户“for_test_user”'
     )
+    # 标记cases执行状态
+    b_assert.mark_status()
 
 
 if __name__ == "__main__":

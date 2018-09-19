@@ -2,11 +2,11 @@
 import json
 from login_dm import login_api
 from configuration_file import config_data
-from business_assert import contained_text_assert
-
+from business_assert import BusinessAssert
 
 server = config_data['server']
 session = login_api()
+b_assert = BusinessAssert()
 
 
 # 创建DM平台用户
@@ -102,20 +102,24 @@ def delete_customer(customer_id):
 add_user_account('t_user1')
 cus_info1 = new_customer('commons库数据同步服务商', '简称1t', 't_user1')
 # 断言
-contained_text_assert(
+b_assert.contained_text_assert(
     str(cus_info1),
     ["'code': 500", "'success': False"],
+    end='@结束@',
     state='服务商用户名重复测试'
 )
 
 # commons库数据同步问题验证
 cus_info2 = new_customer('commons库数据同步服务商', '简称1t', 'user1t')
 # 断言
-contained_text_assert(
+b_assert.contained_text_assert(
     str(cus_info2),
     ["code': 200", "'success': True"],
-    state='commons库数据同步服务商'
+    state='commons库数据同步服务商',
+    end='@结束@'
 )
+# 标记cases执行状态
+b_assert.mark_status()
 
 # 清理环境
 del_user_account(get_account_info('t_user1').get('id', 'no data'))

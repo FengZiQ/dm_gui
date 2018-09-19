@@ -2,11 +2,11 @@
 import json
 from login_dm import login_api
 from configuration_file import config_data
-from business_assert import contained_text_assert
-
+from business_assert import BusinessAssert
 
 server = config_data['server']
 session = login_api()
+b_assert = BusinessAssert()
 
 
 # 创建服务商
@@ -55,20 +55,24 @@ def delete_customer(customer_id):
 cus_info0 = new_customer('test服务商用户名重复', '简称1t', 'user1t')
 cus_info1 = new_customer('commons库数据同步服务商', '简称2t', 'user1t')
 # 断言
-contained_text_assert(
+b_assert.contained_text_assert(
     str(cus_info1),
     ["'code': 500", "'success': False"],
+    end='@结束@',
     state='服务商用户名重复测试'
 )
 
 # commons库数据同步问题验证
 cus_info2 = new_customer('commons库数据同步服务商', '简称2t', 'user2t')
 # 断言
-contained_text_assert(
+b_assert.contained_text_assert(
     str(cus_info2),
     ["code': 200", "'success': True"],
-    state='commons库数据同步服务商'
+    state='commons库数据同步服务商',
+    end='@结束@'
 )
+# 标记cases执行状态
+b_assert.mark_status()
 
 # 清理环境
 delete_customer(cus_info0.get('data', 'no data'))
