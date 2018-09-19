@@ -58,7 +58,8 @@ cus_info1 = new_customer('test服务商名称重复', '简称2t', 'user2t')
 b_assert.contained_text_assert(
     str(cus_info1),
     ["'code': 201", "'success': False"],
-    state='服务商名称重复测试'
+    state='服务商名称重复测试',
+    end='@结束@'
 )
 
 # commons库数据同步问题验证

@@ -38,11 +38,9 @@ def to_execute_cases():
 
     # traversal each of test case
     for case in target_test_cases:
-
         for case_body in case.values():
             # if test case has been run
-            if not case_body['exec_on_build']:
-
+            if not case_body['exec_on_build'] or case_body['exec_status'] == 'f':
                 # get time stamp for reportTCResult
                 start_time = time.time()
                 time_stamp = (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
@@ -55,7 +53,7 @@ def to_execute_cases():
                 test_case_external_id = case_body['external_id']
                 case_platform_name = case_body['platform_name']
 
-                # get case result for reportTCResult
+                # getting login user info
                 login_name = tlc.getTestCaseAssignedTester(
                     target_test_plan[0]['id'],
                     case_body['full_external_id'],
