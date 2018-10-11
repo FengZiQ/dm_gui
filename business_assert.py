@@ -27,7 +27,8 @@ class BusinessAssert(object):
     # 查询结果为空断言
     def no_data_assert(self, result, end='', state=''):
         all_logs(state)
-        all_logs(str(result))
+        all_logs('期望结果：值为空')
+        all_logs('实际结果：' + str(result))
         testlink(str(result))
         testlink(end)
         if result:

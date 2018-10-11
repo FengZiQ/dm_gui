@@ -183,6 +183,32 @@ def add_para_config(cus_id, is_default):
         return temp['data']
 
 
+# 获取参数配置信息
+def get_para_config(c_name, cus_id):
+    try:
+        res = session.get(
+            server + 'payChannelConfig/pageList?description=' + c_name + '&customerId=' + cus_id
+        )
+        temp = json.loads(res.text)
+        config_info = temp['data']['list'][0]
+        return config_info
+    except:
+        pass
+
+
+# 删除参数配置
+def del_para_config(p_c_id):
+    try:
+        res = session.post(
+            server + 'payChannelConfig/deletes',
+            json=[int(p_c_id)]
+        )
+        return res.text
+    except Exception as e:
+        print(e)
+        print('删除服务商信息失败')
+
+
 # 给非默认参数配置绑定设备
 def bind_device_for_para_config(pay_channel_id, device_id, device_no):
     try:
@@ -231,10 +257,11 @@ def get_sum_catch_common_config_info(config_name):
 # 删除金额抓取通用配置
 def del_sum_catch_common_config(config_id):
     try:
-        session.post(
+        res = session.post(
             server + 'customerConfig/deletes',
             json=[config_id]
         )
+        return res.text
     except:
         pass
 
@@ -522,10 +549,11 @@ def receipt_config_unbind_device(mode_id, device_no=list()):
 # 删除票据解析配置
 def del_receipt_config_mode(mode_id):
     try:
-        session.post(
+        res = session.post(
             server + 'receiptTemplate/deletes',
             json=[int(mode_id)]
         )
+        return res.text
     except:
         pass
 
@@ -572,7 +600,7 @@ def del_global_config(config_id):
         pass
 
 
-# 新增全局配置
+# 新增日志配置
 def add_log_config(customer_id):
     try:
         res = session.post(
@@ -592,7 +620,7 @@ def add_log_config(customer_id):
         pass
 
 
-# 获取全局配置id
+# 获取日志配置id
 def get_log_config_id(customer_name):
     try:
         res = session.get(
@@ -605,11 +633,107 @@ def get_log_config_id(customer_name):
         pass
 
 
-# 删除全局配置
+# 删除日志配置
 def del_log_config(config_id):
     try:
-        session.post(
+        res = session.post(
             server + 'logConfig/deletes',
+            json=[int(config_id)]
+        )
+        return res.text
+    except:
+        pass
+
+
+# 新增自定义语音模板
+def add_self_voice_template(file_name, config_name, customer_id):
+    try:
+        files = {'file': open(config_data['file_path'] + file_name, 'rb')}
+        res = session.post(
+                server + 'voiceTemplateConfig/uploadOss',
+                data={
+                    'name': config_name,
+                    'customerId': str(customer_id),
+                    'check': '1',
+                    'name1': '支付成功',
+                    '1': 'voice.wav',
+                    'Content-Type': 'audio/wav',
+                    'id': ''
+                },
+                files=files
+            )
+        temp = json.loads(res.text)
+    except Exception as e:
+        print(e)
+    else:
+        return temp['data']
+
+
+# 获取自定义语音模板id
+def get_self_voice_template_id(config_name):
+    try:
+        res = session.get(
+            server + 'voiceTemplateConfig/pageList?name=' + config_name
+        )
+        temp = json.loads(res.text)
+        config_id = temp['data']['list'][0]['id']
+        return config_id
+    except:
+        pass
+
+
+# 删除自定义语音模板
+def del_self_voice_template(config_id):
+    try:
+        session.post(
+            server + 'voiceTemplateConfig/deletes',
+            json={"id": str(config_id)}
+        )
+    except:
+        pass
+
+
+# 新增自定义壁纸
+def add_self_wallpaper(file_name, config_name, customer_id):
+    try:
+        files = {'file': open(config_data['file_path'] + file_name, 'rb')}
+        res = session.post(
+                server + 'scanConfig/addWithFile',
+                data={
+                    'name': config_name,
+                    'customerId': str(customer_id),
+                    'logoFile': file_name,
+                    'operateType': 'modify',
+                    'Content-Type': 'image/bmp',
+                    'id': ''
+                },
+                files=files
+            )
+        temp = json.loads(res.text)
+    except Exception as e:
+        print(e)
+    else:
+        return temp['data']
+
+
+# 获取自定义壁纸id
+def get_self_wallpaper_id(config_name):
+    try:
+        res = session.get(
+            server + 'scanConfig/pageList?name=' + config_name
+        )
+        temp = json.loads(res.text)
+        config_id = temp['data']['list'][0]['id']
+        return config_id
+    except:
+        pass
+
+
+# 删除自定义语音模板
+def del_self_wallpaper(config_id):
+    try:
+        session.post(
+            server + 'scanConfig/deletes',
             json=[int(config_id)]
         )
     except:
@@ -617,26 +741,5 @@ def del_log_config(config_id):
 
 
 if __name__ == "__main__":
-    # print(get_unsold_device_info())
-    # print(customer_info('测试账户'))
-    print(new_customer('test_测试自定义配置模板'))
-    # delete_customer(new_customer('test_customer'))
-    # upload_excel_file(get_unsold_device_info())
-    # unbind_device()
-    # total_customer()
-    # del_upgrade_package('')
-    # del_upgrade_package('test_ces', '1.000.000')
-    # print(get_device_info('4113180400130999'))
-    # print(add_para_config('44', '0'))
-    # print(get_sum_catch_common_config_info('payplus商户'))
-    # print(get_sum_self_config_info('4113180400130999'))
-    # del_sum_self_config('')
-    # print(add_sum_self_config(get_device_info('4113180400130999')))
-    # print(add_self_config_mode('', ''))
-    # del_self_config_mode('', '')
-    # print(get_self_common_config_id('testtest'))
-    # del_self_common_config(163)
-    # get_self_batch_config_id('4113180400130999')
-    # print(get_receipt_config_id('测试_fengziqi'))
-
-
+    a=get_para_config('fakjfadjfasfja',1)
+    print(a)

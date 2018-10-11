@@ -2,12 +2,13 @@
 from api_condition import *
 from gui_test_tool import *
 
+tool = GUITestTool()
+# 测试数据
+test_data = get_unsold_device_info()
 
+
+# 查询未销售设备
 def unsold_device_query():
-    # 测试数据
-    test_data = get_unsold_device_info()
-    tool = GUITestTool()
-
     tool.click_action(
         '/html/body/div/div/ul/li[3]/a',
         '设备管理标签'
@@ -17,9 +18,10 @@ def unsold_device_query():
         '未销售列表标签'
     )
     tool.fill_action(
-        '//*[@id="queryDeviceId"]',
-        test_data[0]['serialNum'],
-        '设备编号输入框'
+        'queryDeviceId',
+        test_data[0].get('serialNum', ''),
+        '设备编号输入框',
+        locator=By.ID
     )
     tool.click_action(
         '//*[@class="searchBtn"]',
@@ -64,9 +66,39 @@ def unsold_device_query():
         '@结束@'
     )
 
-    tool.mark_status()
-    tool.finished()
+
+# 查询已销售设备
+def query_sold_device():
+    tool.driver.refresh()
+    time.sleep(5)
+    c_id = new_customer('test未销售列表查询已销售设备')
+    c_info = customer_info('test未销售列表查询已销售设备')
+    bind_device(c_id, c_info.get('treeId', ''), [test_data[1].get('id', '')])
+    tool.fill_action(
+        'queryDeviceId',
+        test_data[1].get('serialNum', ''),
+        '设备编号输入框',
+        locator=By.ID
+    )
+    tool.click_action(
+        '//*[@class="searchBtn"]',
+        '查询按钮'
+    )
+    # 断言
+    tool.equal_text_assert(
+        'fontbold',
+        'list count',
+        '0',
+        end='@结束@',
+        locator=By.CLASS_NAME
+    )
+
+    # 清理环境
+    delete_customer(c_id)
 
 
 if __name__ == "__main__":
     unsold_device_query()
+    query_sold_device()
+    tool.mark_status()
+    tool.finished()

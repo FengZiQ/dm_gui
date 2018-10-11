@@ -57,7 +57,7 @@ def del_is_default_para_config():
         'ok',
         '保存按钮',
         locator=By.CLASS_NAME,
-        response_time=1
+        response_time=2
     )
     # 断言
     tool.equal_text_assert(
@@ -97,7 +97,7 @@ def del_not_default_not_device():
         'ok',
         '保存按钮',
         locator=By.CLASS_NAME,
-        response_time=1
+        response_time=2
     )
     # 断言
     tool.equal_text_assert(
@@ -139,7 +139,7 @@ def del_not_default_have_device():
         'ok',
         '保存按钮',
         locator=By.CLASS_NAME,
-        response_time=1
+        response_time=2
     )
     # 断言
     tool.equal_text_assert(

@@ -76,7 +76,7 @@ def device_upgrade():
     )
     # 选择升级版本
     tool.click_action(
-        '//table[@id="upgradeTbl"]/tbody/tr[1]/td[3]/select/option[2]',
+        '//table[@id="upgradeTbl"]/tbody/tr[1]/td[3]/select/option[1]',
         '选择版本1.4.13'
     )
     # 点击确认升级按钮

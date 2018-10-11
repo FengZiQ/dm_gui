@@ -81,7 +81,7 @@ def one_device_bind():
         'ok',
         '提示框的确定按钮',
         By.CLASS_NAME,
-        response_time=1
+        response_time=2
     )
     # 断言
     tool.equal_text_assert(
@@ -180,7 +180,7 @@ def batch_bind():
         'ok',
         '提示框的确定按钮',
         By.CLASS_NAME,
-        response_time=1
+        response_time=2
     )
     # 断言
     tool.equal_text_assert(

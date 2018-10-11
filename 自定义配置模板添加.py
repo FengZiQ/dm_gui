@@ -17,7 +17,7 @@ def return_button():
     )
     tool.click_action(
         '//*[@id="leftNav"]/li[4]/ul/li[4]',
-        '金额抓取独立配置标签'
+        '自定义配置模板标签'
     )
     # 点击添加配置模板按钮
     tool.click_action(
@@ -35,7 +35,7 @@ def return_button():
     tool.equal_text_assert(
         'addbtn',
         '添加配置模板按钮',
-        '添加配置模板',
+        '添加配置模版',
         end='@结束@',
         locator=By.ID
     )
@@ -117,39 +117,17 @@ def pass_case():
         '新增自定义通用配置模板信息成功',
         end='@结束@'
     )
-    delete_customer(cus_id)
-
-
-def service_testing():
-    # 模板名称输入框输入：test_for_测试
-    tool.fill_action(
-        'templateName',
-        'test_for_测试',
-        '模板名称输入框',
-        locator=By.ID
-    )
-    # 点击查询按钮
-    tool.click_action(
-        'querybtn',
-        '查询按钮',
-        locator=By.ID
-    )
-    # 断言
-    tool.equal_text_assert(
-        'fontbold',
-        'list count',
-        '0',
-        end='@结束@',
-        locator=By.CLASS_NAME
-    )
 
 
 if __name__ == "__main__":
     return_button()
     pass_case()
-    service_testing()
     tool.mark_status()
     tool.finished()
     # 清理环境
-    mode_info = get_self_config_mode_info('test_for_测试')
-    del_self_config_mode(mode_info['id'], cus_id)
+    try:
+        mode_info = get_self_config_mode_info('test_for_测试')
+        del_self_config_mode(mode_info['id'], cus_id)
+        delete_customer(cus_id)
+    except:
+        pass
