@@ -66,7 +66,7 @@ def get_merchant_info(cus_name, p_id='', t_id=''):
         m_info = temp['data']['list']
     except Exception as e:
         print(e)
-        print('获取服务商信息失败')
+        print('获取商户信息失败')
     else:
         return m_info
 
@@ -141,37 +141,43 @@ def del_sp_user(u_id):
 cus_info0 = new_customer('test服务商用户名重复SP用户', '简称t1', 't_sp_user')
 time.sleep(5)
 mer_info = get_merchant_info('test服务商用户名重复SP用户')
-sh_id = add_merchant(mer_info[0].get('id', 'no data'))
-time.sleep(3)
+if mer_info:
+    sh_id = add_merchant(mer_info[0].get('id', 'no data'))
+    time.sleep(3)
 
-# 创建SP平台商户用户：tsp_user1
-user_id = add_sp_user(sh_id, 'tsp_user1')
-# 创建与SP平台用户重名的服务商
-cus_info1 = new_customer('commons库数据同步服务商', '简称t2', 'tsp_user1')
-# 断言
-b_assert.contained_text_assert(
-    str(cus_info1),
-    ["'code': 500", "'success': False"],
-    end='@结束@',
-    state='服务商用户名与SP平台用户名重复测试'
-)
+    # 创建SP平台商户用户：tsp_user1
+    user_id = add_sp_user(sh_id, 'tsp_user1')
+    # 创建与SP平台用户重名的服务商
+    cus_info1 = new_customer('commons库数据同步服务商', '简称t2', 'tsp_user1')
+    # 断言
+    b_assert.contained_text_assert(
+        str(cus_info1),
+        ["'code': 500", "'success': False"],
+        end='@结束@',
+        state='服务商用户名与SP平台用户名重复测试'
+    )
 
-# commons库数据同步问题验证
-cus_info2 = new_customer('commons库数据同步服务商', '简称2t', 'user2t')
-# 断言
-b_assert.contained_text_assert(
-    str(cus_info2),
-    ["code': 200", "'success': True"],
-    state='commons库数据同步服务商',
-    end='@结束@'
-)
+    # commons库数据同步问题验证
+    cus_info2 = new_customer('commons库数据同步服务商', '简称2t', 'user2t')
+    # 断言
+    b_assert.contained_text_assert(
+        str(cus_info2),
+        ["code': 200", "'success': True"],
+        state='commons库数据同步服务商',
+        end='@结束@'
+    )
+
+    # 清理环境
+    del_sp_user(user_id)
+    del_merchant(sh_id)
+    delete_customer(cus_info2.get('data', 'no data'))
+    if str(cus_info1.get('data', 'no data')).isdigit():
+        delete_customer(cus_info1.get('data', 'no data'))
+else:
+    b_assert.flag = True
+
 # 标记cases执行状态
 b_assert.mark_status()
 
-# 清理环境
-del_sp_user(user_id)
-del_merchant(sh_id)
 delete_customer(cus_info0.get('data', 'no data'))
-delete_customer(cus_info2.get('data', 'no data'))
-if str(cus_info1.get('data', 'no data')).isdigit():
-    delete_customer(cus_info1.get('data', 'no data'))
+

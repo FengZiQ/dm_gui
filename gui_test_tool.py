@@ -170,6 +170,23 @@ class GUITestTool(object):
         testlink('操作触发生成的log:\n' + log_text.replace('[01;31m[K', '').replace('[m[K', ''))
         testlink(end)
 
+    # 断言元素的属性
+    def element_attribute(self, path, location, attr_name, expected, end='', locator=By.XPATH):
+        try:
+            attr = self.driver.find_element(locator, path).get_attribute(attr_name)
+            all_logs('期望结果：' + location + '的' + attr_name + '属性值为' + expected)
+            all_logs('实际结果：' + location + '的' + attr_name + '属性值为' + attr)
+            testlink(location + '的' + attr_name + '属性值为' + attr)
+            testlink(end)
+            if attr != expected:
+                self.FailedFlag = True
+        except Exception as e:
+            self.FailedFlag = True
+            all_logs('实际结果: ' + str(e))
+            testlink(str(e))
+            testlink(end)
+            all_logs(location + ' is not found\n')
+
     # 标记case执行通过状态
     def mark_status(self):
 

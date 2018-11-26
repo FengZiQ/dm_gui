@@ -6,21 +6,15 @@ tool = GUITestTool()
 
 
 def add_service_provider():
-
+    # 点击服务商管理标签
     tool.click_action(
         '/html/body/div[1]/div[2]/ul/li[2]/a',
         '服务商管理'
     )
-
-    before_list_count = tool.wait_for_element(
-        'fontbold',
-        'list count',
-        By.CLASS_NAME
-    )
-
+    # 点击添加服务商按钮
     tool.click_action(
         'addbtn',
-        '添加服务商',
+        '添加服务商按钮',
         By.ID
     )
     tool.fill_action(
@@ -112,19 +106,9 @@ def add_service_provider():
     tool.equal_text_assert(
         '/html/body/div/div/span/p',
         '提示消息',
-        '新增服务商信息成功'
+        '新增服务商信息成功',
+        end='@结束@'
     )
-    try:
-        tool.equal_text_assert(
-            'fontbold',
-            'list count',
-            str(int(before_list_count) + 1),
-            end='@结束@',
-            locator=By.CLASS_NAME
-        )
-    except:
-        pass
-
     # cases执行结果
     tool.mark_status()
 

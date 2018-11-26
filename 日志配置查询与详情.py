@@ -7,7 +7,7 @@ tool = GUITestTool()
 # 前置条件：增加一个名为“日志配置查询测试服务商”的服务商，并为该服务商添加一个日志配置
 cus_id = new_customer('日志配置查询测试服务商')
 add_log_config(cus_id)
-log_config_id = get_log_config_id('日志配置查询测试服务商')
+log_config_id = get_log_config_id(cus_id)
 
 
 def query_by_cus_name():

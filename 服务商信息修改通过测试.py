@@ -1,6 +1,7 @@
 # coding=utf-8
 from gui_test_tool import *
 from api_condition import *
+from selenium.webdriver.common.keys import Keys
 
 
 def modify():
@@ -8,22 +9,28 @@ def modify():
     cus_id = new_customer('test_测试服务商#')
     tool = GUITestTool()
 
-    # 点击服务商管理
+    # 点击服务商管理标签
     tool.click_action(
         '/html/body/div[1]/div[2]/ul/li[2]/a',
         '服务商管理'
     )
     # 查询得到新增的服务商作为修改对象
-    tool.fill_action(
-        'customerName',
-        'test_测试服务商#',
-        '服务商名称框',
-        By.ID
-    )
     tool.click_action(
-        'querybtn',
-        '查询按钮',
-        By.ID
+        '//button[@data-id="customerId"]',
+        '服务商选择下拉按钮'
+    )
+    # 搜索服务商
+    tool.fill_action(
+        '//input[@aria-label="Search"]',
+        'test_测试服务商#',
+        '服务商搜索框'
+    )
+    # 回车选定
+    tool.fill_action(
+        '//input[@aria-label="Search"]',
+        Keys.ENTER,
+        '服务商搜索框',
+        response_time=5
     )
     # 点击修改按钮
     tool.click_action(

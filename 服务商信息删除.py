@@ -1,6 +1,7 @@
 # coding=utf-8
 from gui_test_tool import *
 from api_condition import *
+from selenium.webdriver.common.keys import Keys
 
 tool = GUITestTool()
 
@@ -15,16 +16,23 @@ def delete():
         '服务商管理'
     )
     # 服务商名称输入框输入：test_测试服务商删除
-    tool.fill_action(
-        'customerName',
-        'test_测试服务商删除',
-        '服务商名称框',
-        By.ID
-    )
+    # 点击服务商名称下拉框
     tool.click_action(
-        'querybtn',
-        '查询按钮',
-        By.ID
+        '//button[@data-id="customerId"]',
+        '服务商选择下拉按钮'
+    )
+    # 搜索服务商
+    tool.fill_action(
+        '//input[@aria-label="Search"]',
+        'test_测试服务商删除',
+        '服务商搜索框'
+    )
+    # 回车选定
+    tool.fill_action(
+        '//input[@aria-label="Search"]',
+        Keys.ENTER,
+        '服务商搜索框',
+        response_time=3
     )
     # 点击删除按钮
     tool.click_action(
@@ -40,12 +48,12 @@ def delete():
         response_time=3
     )
     # 断言
-    tool.equal_text_assert(
-        '/html/body/div/div/span/p',
-        '提示消息',
-        '删除服务商信息成功！'
-    )
-    time.sleep(3)
+    # tool.equal_text_assert(
+    #     '//p[@class="msValue"]',
+    #     '提示消息',
+    #     '删除服务商信息成功！'
+    # )
+    # time.sleep(3)
     tool.equal_text_assert(
         'fontbold',
         'list count',

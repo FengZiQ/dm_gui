@@ -1,4 +1,5 @@
 # coding=utf-8
+import time
 from api_condition import *
 from business_assert import BusinessAssert
 
@@ -29,6 +30,7 @@ self_wallpaper_id0 = add_self_wallpaper('test.bmp', 't清空自定义壁纸', cu
 
 # 删除服务商
 delete_customer(cus_id)
+time.sleep(10)
 
 # 断言：删除服务商后参数配置要被清空
 para_config_info = get_para_config('selenium_test1', cus_id)

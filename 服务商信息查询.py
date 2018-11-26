@@ -1,23 +1,35 @@
 # coding=utf-8
 from gui_test_tool import *
 from api_condition import *
+from selenium.webdriver.common.keys import Keys
 
 tool = GUITestTool()
 
 
 def query_provider_service():
     cus_id = new_customer('test_测试服务商查询')
-
+    # 点击服务商管理标签
     tool.click_action(
         '/html/body/div[1]/div[2]/ul/li[2]/a',
         '服务商管理'
     )
-    # 服务商名称输入框：test_测试服务商查询
+    # 点击服务商名称下拉框
+    tool.click_action(
+        '//button[@data-id="customerId"]',
+        '服务商选择下拉按钮'
+    )
+    # 搜索服务商
     tool.fill_action(
-        'customerName',
+        '//input[@aria-label="Search"]',
         'test_测试服务商查询',
-        '服务商名称输入框',
-        By.ID
+        '服务商搜索框'
+    )
+    # 回车选定
+    tool.fill_action(
+        '//input[@aria-label="Search"]',
+        Keys.ENTER,
+        '服务商搜索框',
+        response_time=3
     )
     tool.click_action(
         'salesName',

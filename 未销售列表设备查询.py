@@ -24,7 +24,7 @@ def unsold_device_query():
         locator=By.ID
     )
     tool.click_action(
-        '//*[@class="searchBtn"]',
+        '//button[@class="searchBtn"]',
         '查询按钮'
     )
     # 断言

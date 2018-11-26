@@ -621,10 +621,10 @@ def add_log_config(customer_id):
 
 
 # 获取日志配置id
-def get_log_config_id(customer_name):
+def get_log_config_id(customer_id):
     try:
         res = session.get(
-            server + 'logConfig/pageList?customerName=' + customer_name
+            server + 'logConfig/pageList?customerId=' + str(customer_id)
         )
         temp = json.loads(res.text)
         config_id = temp['data']['list'][0]['id']

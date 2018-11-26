@@ -114,6 +114,6 @@ if __name__ == "__main__":
     tool.mark_status()
     tool.finished()
     # 清理环境
-    config_id = get_log_config_id('日志配置添加测试服务商')
+    config_id = get_log_config_id(cus_id)
     del_log_config(config_id)
     delete_customer(cus_id)

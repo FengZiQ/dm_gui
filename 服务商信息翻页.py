@@ -22,7 +22,7 @@ def page_turning():
         '第一行服务商名称'
     )
     try:
-        page_count = str(int(list_count)//100 + 1)
+        page_count = str(int(list_count) // 100 + 1)
     except Exception as e:
         print(e)
 
