@@ -32,6 +32,7 @@ class GUITestTool(object):
         self.driver = webdriver.Firefox()
         self.driver.maximize_window()
         self.driver.get(base_url)
+        time.sleep(5)
         self.driver.find_element_by_id('username').send_keys(self.user)
         self.driver.find_element_by_id("password").send_keys(self.password)
         # self.driver.find_element_by_id("captcha").send_keys('123456')

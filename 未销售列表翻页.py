@@ -63,7 +63,8 @@ def page_turning():
     )
     tool.click_action(
         '//div/div[4]/div/div/button',
-        '翻页确定按钮'
+        '翻页确定按钮',
+        response_time=4
     )
     last_page_data = tool.wait_for_element(
         '//table/tbody/tr[1]/td[2]',
@@ -74,7 +75,7 @@ def page_turning():
     if next_page_data == last_page_data:
         tool.FailedFlag = True
         print('实际第一行第一列的设备号为：' + next_page_data)
-    print('实际第一行第一列的设备号据为：' + last_page_data)
+    print('实际第一行第一列的设备号为：' + last_page_data)
     testlink('@结束@')
 
     tool.mark_status()

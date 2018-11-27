@@ -123,21 +123,53 @@ def upload_excel_file(device_no, file_name):
     workbook.save(file_name)
 
 
-# 删除升级包
-def del_upgrade_package(p_name, p_version):
+# 新增固件升级包
+def add_upgrade_package(file_name, sw_name, version):
     try:
-        # 获取升级包信息
-        res0 = session.get(
-            server + 'upgradePackage/pageList?softName=' + p_name + '&version=' + p_version
-        )
-        release_info = json.loads(res0.text)['data']['list'][0]
+        files = {'file': open(config_data['file_path'] + file_name, 'rb')}
+        res = session.post(
+                server + 'upgradePackage/create',
+                data={
+                    'file': file_name,
+                    'softName': sw_name,
+                    'type': 'firmware',
+                    'subType': '16',
+                    'version': version,
+                    'upgradeStatus': '0',
+                    'updateLog': 'for test',
+                    'signType': '0',
+                    'customerId': '',
+                    'customerIds': '44'
+                },
+                files=files
+            )
+        temp = json.loads(res.text)
     except Exception as e:
         print(e)
     else:
-        session.post(
-            server + 'upgradePackage/deletes',
-            json=[release_info['id']]
-        )
+        return temp['data']
+
+
+# 删除升级包
+def del_upgrade_package(p_name='', p_version='', p_id=None):
+    try:
+        # 获取升级包信息
+        if p_name:
+            res0 = session.get(
+                server + 'upgradePackage/pageList?softName=' + p_name + '&version=' + p_version
+            )
+            release_info = json.loads(res0.text)['data']['list'][0]
+            session.post(
+                server + 'upgradePackage/deletes',
+                json=[release_info['id']]
+            )
+        else:
+            session.post(
+                server + 'upgradePackage/deletes',
+                json=[p_id]
+            )
+    except Exception as e:
+        print(e)
 
 
 # 获取设备信息

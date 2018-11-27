@@ -21,14 +21,14 @@ def upgrade_patch_query():
         '软件类型选择“客户端”'
     )
     tool.click_action(
-        '//select[@id="subType"]/option[3]',
-        '版本类型选择“闪票小盒”'
+        '//select[@id="subType"]/option[2]',
+        '版本类型选择“BasePay”'
     )
     # 断言
     tool.no_text_assert(
         '//tbody[@class="trStyle"]',
         '查询结果',
-        ['固件', '键盘', 'BasePay', 'A5-System']
+        ['固件', '键盘', '闪票小盒', 'A5-System']
     )
     # 查询
     tool.click_action(
@@ -58,6 +58,7 @@ def upgrade_patch_query():
         ]
     )
     tool.driver.refresh()
+    time.sleep(5)
     # 查询
     tool.fill_action(
         'softName',
@@ -67,7 +68,7 @@ def upgrade_patch_query():
     )
     tool.fill_action(
         'version',
-        '4.0.35.1',
+        '4.0.22',
         '版本号输入框',
         locator=By.ID
     )
@@ -86,7 +87,7 @@ def upgrade_patch_query():
     tool.contained_text_assert(
         'softwareUpgradTable',
         '查询结果列表',
-        ['固件', 'A5-System', '4.0.35.1'],
+        ['固件', 'A5-System', '4.0.22'],
         end="@结束@",
         locator=By.ID
     )

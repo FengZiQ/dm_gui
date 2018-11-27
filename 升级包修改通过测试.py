@@ -1,8 +1,16 @@
 # coding=utf-8
 from gui_test_tool import *
+from api_condition import add_upgrade_package, del_upgrade_package
 
 
 def add_upgrade_patch():
+    # 前置条件：创建一个升级包
+    p_id = add_upgrade_package(
+        file_name='test.ppm',
+        sw_name='修改升级包测试',
+        version='100.1.2.3'
+    )
+
     tool = GUITestTool()
 
     # 进入升级包管理页
@@ -17,7 +25,7 @@ def add_upgrade_patch():
     # 查询
     tool.fill_action(
         'softName',
-        '测试_固件_test1',
+        '修改升级包测试',
         '升级包名称输入框',
         locator=By.ID
     )
@@ -53,7 +61,7 @@ def add_upgrade_patch():
     # 填写升级包名称
     tool.fill_action(
         'softName',
-        '测试_固件_test1_111',
+        '修改升级包测试_111',
         '升级包名称输入框',
         By.ID
     )
@@ -105,7 +113,7 @@ def add_upgrade_patch():
         print(e)
     tool.fill_action(
         'softName',
-        '测试_固件_test1',
+        '修改升级包测试_111',
         '升级包名称输入框',
         locator=By.ID
     )
@@ -129,6 +137,9 @@ def add_upgrade_patch():
 
     tool.mark_status()
     tool.finished()
+
+    # 清理环境
+    del_upgrade_package(p_id)
 
 
 if __name__ == "__main__":

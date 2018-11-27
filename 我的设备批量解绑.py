@@ -1,7 +1,7 @@
 # coding=utf-8
 from api_condition import *
 from gui_test_tool import *
-
+from selenium.webdriver.common.keys import Keys
 
 def precondition():
     # 销售设备
@@ -34,12 +34,30 @@ def my_device_batch_unbind():
     )
     # 选择批量文件
     tool.driver.find_element(By.ID, 'unbindFile').send_keys(config_data['file_path'] + '批量解绑测试.xls')
-    # 点击一键解绑按钮
+    # 选择设备所在的服务商: 测试账户
     tool.click_action(
-        '//form[@id="mybindFile"]/div[2]/input',
-        '一键解绑按钮',
-        response_time=1
+        '//button[@data-id="customerIdUnbind"]',
+        '服务商下拉列表'
     )
+    # 搜索服务商
+    tool.fill_action(
+        '//form/div[1]/div[2]/div/div/div/input',
+        '测试账户',
+        '服务商搜索框'
+    )
+    # 回车选定
+    tool.fill_action(
+        '//form/div[1]/div[2]/div/div/div/input',
+        Keys.ENTER,
+        '服务商搜索框',
+        response_time=3
+    )
+    # # 点击一键解绑按钮
+    # tool.click_action(
+    #     '//div/form/div[2]/input',
+    #     '一键解绑按钮',
+    #     response_time=1
+    # )
     # 断言
     tool.equal_text_assert(
         '/html/body/div/div/span/p',

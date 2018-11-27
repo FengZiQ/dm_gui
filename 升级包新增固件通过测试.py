@@ -41,7 +41,7 @@ def add_upgrade_patch():
         '新建升级',
         locator=By.ID
     )
-    for i in range(len(test_data['upgrade_type'])):
+    for i in range(len(test_data['package_type'])):
         # 新增升级包
         tool.click_action(
             'addbtn',
@@ -179,11 +179,10 @@ def add_upgrade_patch():
             test_data['upgrade_type'][i],
             end='@结束@'
         )
-        if i > 0:
-            del_upgrade_package(
-                '测试_固件_test' + str(i+1),
-                '200.36.36.3' + str(i+3)
-            )
+        del_upgrade_package(
+            '测试_固件_test' + str(i+1),
+            '200.36.36.3' + str(i+3)
+        )
 
     tool.mark_status()
     tool.finished()

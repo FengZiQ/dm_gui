@@ -30,13 +30,14 @@ def device_upgrade_query():
     tool.fill_action(
         '//input[@aria-label="Search"]',
         Keys.ENTER,
-        '服务商搜索输入框'
+        '服务商搜索输入框',
+        response_time=5
     )
     tool.click_action(
         '//select[@id="connectState"]/option[2]',
-        '接状态选择已连接'
+        '接状态选择已连接',
+        response_time=20
     )
-    time.sleep(8)
     # 断言
     tool.no_text_assert(
         '//div[@id="tableBodyCount"]',
@@ -46,7 +47,8 @@ def device_upgrade_query():
     # 连接状态选择“全部”
     tool.click_action(
         '//select[@id="connectState"]/option[1]',
-        '接状态选择已连接'
+        '接状态选择已连接',
+        response_time=5
     )
     # 查询
     tool.fill_action(

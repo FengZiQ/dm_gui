@@ -66,13 +66,14 @@ def batch_setting_warranty_period():
         '/html/body/div/div/div/div/div/div/div/div[2]/button[1]',
         '保存按钮',
         By.XPATH,
-        1
+        response_time=2
     )
     # 断言
     tool.equal_text_assert(
-        '/html/body/div/div/span/p',
+        'msValue',
         '提示消息',
-        '保修期批量设置成功'
+        '保修期批量设置成功',
+        locator=By.CLASS_NAME
     )
     # 查询
     tool.fill_action(
