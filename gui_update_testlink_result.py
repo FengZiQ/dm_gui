@@ -11,7 +11,7 @@ tester_key = {"admin": "68f26f458e8b1d537043f76d78f815d9"}
 tlc = testlink.TestlinkAPIClient(url, tester_key["admin"])
 
 project_name = '设备管理平台'
-test_plan_name = '11.13测试环境'
+test_plan_name = '20190308'
 first_menu = ['设备首页', '服务商管理', '设备管理', '配置管理', '用户管理', '系统管理', '数据统计']
 
 
@@ -85,7 +85,7 @@ def to_execute_cases():
                         steps_notes = temp3.split('@结束@')[:-1]
 
                         notes.close()
-
+                        # 此处需要优化
                         # if case steps length equal step notes length and test case result is 'p', the case result is pass
                         if len(steps_notes) == len(case_steps) and test_case_result == 'p':
 
