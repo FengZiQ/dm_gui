@@ -1,9 +1,9 @@
 # coding=utf-8
-from gui_test_tool import *
+from gui_test_tool import tool, By
 from api_condition import *
 from selenium.webdriver.common.keys import Keys
 
-tool = GUITestTool()
+# tool = GUITestTool()
 
 
 def delete():
@@ -64,7 +64,7 @@ def delete():
 
     # cases执行结果
     tool.mark_status()
-    tool.finished()
+    # tool.finished()
     # 清理环境
     delete_customer(cus_id)
 

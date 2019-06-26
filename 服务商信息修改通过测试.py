@@ -1,5 +1,5 @@
 # coding=utf-8
-from gui_test_tool import *
+from gui_test_tool import tool,By
 from api_condition import *
 from selenium.webdriver.common.keys import Keys
 
@@ -7,7 +7,7 @@ from selenium.webdriver.common.keys import Keys
 def modify():
     # 前置条件：新增一个服务商
     cus_id = new_customer('test_测试服务商#')
-    tool = GUITestTool()
+    # tool = GUITestTool()
 
     # 点击服务商管理标签
     tool.click_action(
@@ -112,7 +112,7 @@ def modify():
 
     # cases执行结果
     tool.mark_status()
-    tool.finished()
+    # tool.finished()
 
     # 清理环境：删除test_测试服务商# 服务商
     delete_customer(cus_id)

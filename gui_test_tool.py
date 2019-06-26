@@ -1,45 +1,31 @@
 # coding=utf-8
+import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from to_log import *
-import time
+from to_log import testlink, all_logs
 from configuration_file import config_data
 
 
-Pass = "'result': 'p'"
-Fail = "'result': 'f'"
-
-
 class GUITestTool(object):
-
-    server = config_data['server']
-
-    # 登录
-    def __init__(self, base_url=server):
-        # login user and username
-        self.user = config_data['username']
-        self.password = config_data['pwd']
-
-        # mark test cases execution status
+    # 初始化
+    def __init__(self):
+        # 标记用例执行结果
+        self.Pass = "'result': 'p'"
+        self.Fail = "'result': 'f'"
+        # 标记用例执行状态
         self.FailedFlag = False
-
-        # execution login
-        # IE 浏览器测试
-        # self.driver = webdriver.Ie()
-        # 谷歌浏览器测试
-        # self.driver = webdriver.Chrome()
-        # 火狐狸浏览器测试
+        # 打开火狐浏览器
         self.driver = webdriver.Firefox()
-        self.driver.maximize_window()
-        self.driver.get(base_url)
-        self.driver.find_element_by_id('username').send_keys(self.user)
-        self.driver.find_element_by_id("password").send_keys(self.password)
+        self.driver.get(config_data['server'])
+        time.sleep(3)
+        self.driver.find_element_by_css_selector('#username').send_keys(config_data['username'])
+        self.driver.find_element_by_css_selector("#password").send_keys(config_data['pwd'])
         # self.driver.find_element_by_id("captcha").send_keys('123456')
-        self.driver.find_element_by_id("loginSubmit").click()
+        self.driver.find_element_by_css_selector("#loginSubmit").click()
         if_login = self.wait_for_element(
-            'accountName',
-            '登陆者身份',
-            locator=By.ID
+            path='#accountName',
+            location='登陆者身份',
+            locator=By.CSS_SELECTOR
         )
         if if_login != config_data['username']:
             testlink('登录失败！\n')
@@ -48,7 +34,14 @@ class GUITestTool(object):
 
     """
     locator type: 
-    By.ID,By.NAME,By.CLASS_NAME,By.TAG_NAME,By.LINK_TEXT,By.PARTIAL_LINK_TEXT,By.XPATH,By.CSS_SELECTOR
+    By.ID, #此种定位方式存在问题
+    By.NAME,
+    By.CLASS_NAME,
+    By.TAG_NAME,
+    By.LINK_TEXT,
+    By.PARTIAL_LINK_TEXT,
+    By.XPATH,
+    By.CSS_SELECTOR
     """
     # 鼠标左键
     def click_action(self, path, location, locator=By.XPATH, response_time=3):
@@ -192,12 +185,17 @@ class GUITestTool(object):
 
         if self.FailedFlag:
             all_logs('-*- The case is executed -*-\n')
-            all_logs(Fail)
-            testlink(Fail + '\n')
+            all_logs(self.Fail)
+            testlink(self.Fail + '\n')
+            self.FailedFlag = False
         else:
             all_logs('-*- The case is executed -*-\n')
-            all_logs(Pass)
-            testlink(Pass + '\n')
+            all_logs(self.Pass)
+            testlink(self.Pass + '\n')
 
     def finished(self):
-        self.driver.close()
+        self.driver.quit()
+
+
+tool = GUITestTool()
+
